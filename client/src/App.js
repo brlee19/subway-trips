@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Trip from './components/Trip.js';
 import GoogleMap from './components/GoogleMap.js';
+import { calculateCentralCoordinates } from './utils/utils.js';
 
 import axios from 'axios';
 
@@ -11,6 +12,10 @@ class App extends Component {
     this.state = {
       trips: [],
       selectedTripId: '',
+      favorites: {
+        lines: [],
+        trips: []
+      },
       arrivals: [],
       mapCenter: {
         lat: 40.7128,
@@ -18,6 +23,8 @@ class App extends Component {
       },
     };
     this.selectTrip = this.selectTrip.bind(this);
+    this.addLineToFavorites = this.addLineToFavorites.bind(this);
+    this.addTripToFavorites = this.addTripToFavorites.bind(this);
   }
 
   async componentDidMount() {
@@ -41,32 +48,39 @@ class App extends Component {
       this.setState({
         selectedTripId: id,
         arrivals: response.data.data,
-        mapCenter: this.calculateCentralCoordinates(response.data.data)
+        mapCenter: calculateCentralCoordinates(response.data.data)
       });
     } catch(e) {
       console.error('error getting arrivals', e);
     }
   }
 
-  calculateCentralCoordinates(arrivals) {
-    // test case: works even when some coordinates are null
-    // maybe add to some sort of utils file
-    const arrivalsWithCoordinates = arrivals.filter((arrival) => {
-      return arrival.attributes.latitude && arrival.attributes.longitude;
-    })  
+  addLineToFavorites(trip) {
+    const line = trip.attributes.route;
+    if (this.state.favorites.lines.includes(line)) return;
+    this.setState({
+      favorites: {
+        ...this.state.favorites,
+        lines: [
+          ...this.state.favorites.lines,
+          line
+        ]
+      }
+    });
+  }
 
-    const sumCoords = arrivalsWithCoordinates.reduce((coords, arrival) => {
-      const { latitude, longitude } = arrival.attributes;
-      return [
-        coords[0] + parseFloat(latitude), 
-        coords[1] + parseFloat(longitude)
-      ]
-    }, [0, 0]);
-
-    return {
-      lat: sumCoords[0] / arrivalsWithCoordinates.length,
-      long: sumCoords[1] / arrivalsWithCoordinates.length
-    };
+  addTripToFavorites(trip) {
+    const tripId = trip.id;
+    if (this.state.favorites.trips.includes(tripId)) return;
+    this.setState({
+      favorites: {
+        ...this.state.favorites,
+        trips: [
+          ...this.state.favorites.trips,
+          tripId
+        ]
+      }
+    });
   }
 
   render() {
@@ -77,7 +91,12 @@ class App extends Component {
         </header>
         <div className="trips-container">
           {this.state.trips.map(trip => (
-            <Trip key={trip.id} trip={trip} selectTrip={this.selectTrip}/>
+            <Trip key={trip.id}
+                  trip={trip}
+                  selectTrip={this.selectTrip}
+                  addLineToFavorites={this.addLineToFavorites}
+                  addTripToFavorites={this.addTripToFavorites}
+            />
           ))}
         </div>
 

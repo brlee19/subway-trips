@@ -11,7 +11,6 @@ class GoogleMap extends Component {
     this.state = {
       zoom: 12
     }
-    
   }
 
   render() {
