@@ -7,6 +7,8 @@ body {
 .trips-container {
   width: 40%;
   display: inline-block;
+  max-height: 2000px;
+  overflow-y: scroll;
 }
 
 .map-container {
