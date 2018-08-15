@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Trip from './Trip.js';
+import GoogleMap from './GoogleMap.js';
 
 import axios from 'axios';
 
@@ -15,7 +17,6 @@ class App extends Component {
   componentDidMount = async() => {
     const response = await axios.get('/api/trips');
     try {
-      console.log('response is ', response.data)
       this.setState({
         trips: response.data.data
       });
@@ -33,12 +34,12 @@ class App extends Component {
         </header>
         <div className="trips-container">
           {this.state.trips.map(trip => (
-            <div key={trip.id}>
-              <img src={trip.attributes['route-image-url']} alt={trip.attributes.route}/>
-              Origin-Departure: {trip.attributes['origin-departure']}<br/>
-              Destination: {trip.attributes.destination}
-            </div>
+            <Trip key={trip.id} trip={trip}/>
           ))}
+        </div>
+
+        <div className="map-container">
+          <GoogleMap />
         </div>
       </div>
     );
