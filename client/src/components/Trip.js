@@ -9,8 +9,8 @@ const Trip = (props) => {
         Origin-Departure: {trip.attributes['origin-departure']}<br/>
         Destination: {trip.attributes.destination}
       </div>
-      <button onClick={() => {props.addLineToFavorites(trip)}}>Add Line to Favorites</button>
-      <button onClick={() => {props.addTripToFavorites(trip)}}>Add Trip to Favorites</button>
+      <button onClick={() => {props.toggleLineFromFavorites(trip)}}>Toggle Line to/from Favorites</button>
+      <button onClick={() => {props.toggleTripFromFavorites(trip)}}>Toggle Trip to/from Favorites</button>
     </div>
   )
 };

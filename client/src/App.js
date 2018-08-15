@@ -22,9 +22,12 @@ class App extends Component {
         lng: -74.0060
       },
     };
+
     this.selectTrip = this.selectTrip.bind(this);
     this.addLineToFavorites = this.addLineToFavorites.bind(this);
+    this.removeLineFromFavorites = this.removeLineFromFavorites.bind(this);
     this.addTripToFavorites = this.addTripToFavorites.bind(this);
+    this.removeTripFromFavorites = this.removeTripFromFavorites.bind(this);
   }
 
   async componentDidMount() {
@@ -58,6 +61,7 @@ class App extends Component {
   addLineToFavorites(trip) {
     const line = trip.attributes.route;
     if (this.state.favorites.lines.includes(line)) return;
+
     this.setState({
       favorites: {
         ...this.state.favorites,
@@ -69,9 +73,22 @@ class App extends Component {
     });
   }
 
+  removeLineFromFavorites(trip) {
+    const line = trip.attributes.route;
+    if (!this.state.favorites.lines.includes(line)) return;
+
+    this.setState({
+      favorites: {
+        ...this.state.favorites,
+        lines: this.state.favorites.lines.filter(favoriteLine => favoriteLine !== line)
+      }
+    });
+  }
+
   addTripToFavorites(trip) {
     const tripId = trip.id;
     if (this.state.favorites.trips.includes(tripId)) return;
+
     this.setState({
       favorites: {
         ...this.state.favorites,
@@ -79,6 +96,18 @@ class App extends Component {
           ...this.state.favorites.trips,
           tripId
         ]
+      }
+    });
+  }
+
+  removeTripFromFavorites(trip) {
+    const tripId = trip.id;
+    if (!this.state.favorites.trips.includes(tripId)) return;
+    
+    this.setState({
+      favorites: {
+        ...this.state.favorites,
+        trips: this.state.favorites.trips.filter(trip => trip !== tripId)
       }
     });
   }
@@ -94,8 +123,15 @@ class App extends Component {
             <Trip key={trip.id}
                   trip={trip}
                   selectTrip={this.selectTrip}
-                  addLineToFavorites={this.addLineToFavorites}
-                  addTripToFavorites={this.addTripToFavorites}
+                  toggleLineFromFavorites={
+                    this.state.favorites.lines.includes(trip.attributes.route) ?
+                    this.removeLineFromFavorites : this.addLineToFavorites 
+                  }
+                  toggleTripFromFavorites={
+                    this.state.favorites.trips.includes(trip.id) ?
+                    this.removeTripFromFavorites : this.addTripToFavorites
+                  }
+
             />
           ))}
         </div>
