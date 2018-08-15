@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 const Trip = (props) => {
   const { trip } = props
@@ -13,19 +12,6 @@ const Trip = (props) => {
       <button onClick={() => {props.toggleLineFromFavorites(trip)}}>Toggle Line to/from Favorites</button>
       <button onClick={() => {props.toggleTripFromFavorites(trip)}}>Toggle Trip to/from Favorites</button>
     </div>
-  )
-};
-
-Trip.propTypes = {
-  toggleLineFromFavorites: PropTypes.func,
-  toggleTripFromFavorites: PropTypes.func,
-  selectTrip: PropTypes.func,
-  trip: PropTypes.objectOf(
-    PropTypes.shape({
-        id: PropTypes.string,
-        stockLater: PropTypes.number,
-        stockDate: PropTypes.string,
-    })
   )
 };
 
