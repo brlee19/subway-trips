@@ -9,21 +9,40 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      trips: []
+      trips: [],
+      selectedTripId: '',
+      arrivals: []
     };
+    this.selectTrip = this.selectTrip.bind(this);
   }
 
-  componentDidMount = async() => {
-    const response = await axios.get('/api/trips');
+  async componentDidMount() {
+    // move to own function in case it needs to be called indepdently
     try {
+      const response = await axios.get('/api/trips');
       this.setState({
         trips: response.data.data
       });
     } catch(e) {
-      console.log('error', e)
+      console.error('error getting all trips', e)
     }
-    
   }
+
+  async selectTrip(id) {
+    if (id === this.state.selectedTripId) return;
+
+    try {
+      const response = await axios.get(`/api/trips/${id}/arrivals`);
+      console.log('arrivals are', response.data.data)
+      this.setState({
+        selectedTripId: id,
+        arrivals: response.data.data
+      });
+    } catch(e) {
+      console.error('error getting arrivals', e);
+    }
+  }
+
   render() {
     return (
       <div className="App">
@@ -32,7 +51,7 @@ class App extends Component {
         </header>
         <div className="trips-container">
           {this.state.trips.map(trip => (
-            <Trip key={trip.id} trip={trip}/>
+            <Trip key={trip.id} trip={trip} selectTrip={this.selectTrip}/>
           ))}
         </div>
 
