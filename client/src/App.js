@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Trip from './Trip.js';
-import GoogleMap from './GoogleMap.js';
+import Trip from './components/Trip.js';
+import GoogleMap from './components/GoogleMap.js';
 
 import axios from 'axios';
 
@@ -29,7 +28,6 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Subway Trip Planner</h1>
         </header>
         <div className="trips-container">
