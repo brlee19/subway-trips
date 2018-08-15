@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { googleAPIKey } from '../config.js';
 
+import ArrivalInfo from './ArrivalInfo.js';
 import MapPin from './MapPin.js';
 
 class GoogleMap extends Component {
@@ -9,24 +10,34 @@ class GoogleMap extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      zoom: 12
+      selectedArrival: ''
     }
+    this.selectArrival = this.selectArrival.bind(this);
+  }
+
+  selectArrival(arrivalId) {
+    if (arrivalId === this.state.selectedArrival) return;
+    this.setState({
+      selectedArrival: arrivalId
+    });
   }
 
   render() {
-    console.log('center is now', this.props.center);
+    const { arrivals } = this.props;
     return (
       <div style={{ height: '100vh', width: '100%' }}>
+        <ArrivalInfo arrival={arrivals.filter(arrival => arrival.id === this.state.selectedArrival)[0]}/>
         <GoogleMapReact
           bootstrapURLKeys={{ key: googleAPIKey }}
           center={this.props.center}
-          defaultZoom={this.state.zoom}
+          defaultZoom={11}
         >
-        {this.props.arrivals.map(arrival => (
+        {arrivals.map(arrival => (
           <MapPin lat={arrival.attributes.latitude}
-                  lng={arrival.attributes.longitude} 
+                  lng={arrival.attributes.longitude}
                   arrival={arrival}
                   key={arrival.id}
+                  handleClick={this.selectArrival}
           />
         ))}
         </GoogleMapReact>
