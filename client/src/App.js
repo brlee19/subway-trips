@@ -11,7 +11,11 @@ class App extends Component {
     this.state = {
       trips: [],
       selectedTripId: '',
-      arrivals: []
+      arrivals: [],
+      mapCenter: {
+        lat: 40.7128,
+        lng: -74.0060
+      },
     };
     this.selectTrip = this.selectTrip.bind(this);
   }
@@ -36,11 +40,33 @@ class App extends Component {
       console.log('arrivals are', response.data.data)
       this.setState({
         selectedTripId: id,
-        arrivals: response.data.data
+        arrivals: response.data.data,
+        mapCenter: this.calculateCentralCoordinates(response.data.data)
       });
     } catch(e) {
       console.error('error getting arrivals', e);
     }
+  }
+
+  calculateCentralCoordinates(arrivals) {
+    // test case: works even when some coordinates are null
+    // maybe add to some sort of utils file
+    const arrivalsWithCoordinates = arrivals.filter((arrival) => {
+      return arrival.attributes.latitude && arrival.attributes.longitude;
+    })  
+
+    const sumCoords = arrivalsWithCoordinates.reduce((coords, arrival) => {
+      const { latitude, longitude } = arrival.attributes;
+      return [
+        coords[0] + parseFloat(latitude), 
+        coords[1] + parseFloat(longitude)
+      ]
+    }, [0, 0]);
+
+    return {
+      lat: sumCoords[0] / arrivalsWithCoordinates.length,
+      long: sumCoords[1] / arrivalsWithCoordinates.length
+    };
   }
 
   render() {
@@ -56,7 +82,9 @@ class App extends Component {
         </div>
 
         <div className="map-container">
-          <GoogleMap />
+          <GoogleMap arrivals={this.state.arrivals}
+                     center={this.state.mapCenter}
+          />
         </div>
       </div>
     );
