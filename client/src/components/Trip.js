@@ -7,7 +7,7 @@ const Trip = (props) => {
   const { trip, isFavorite } = props
   return (
     <Paper elevation={5}>
-      <div className="trip-wrapper" key={trip.id} onClick={() => props.selectTrip(trip.id)}>
+      <div className="trip-wrapper" key={trip.id}>
         <div className="line-picture"> 
           <img
             src={trip.attributes['route-image-url']}
@@ -16,9 +16,16 @@ const Trip = (props) => {
           />
         </div>
 
-        <div className="trip-info">
-          <strong>Departure From Origin</strong>: {trip.attributes['origin-departure']}<br/>
-          <strong>Destination</strong>: {trip.attributes.destination}
+        <div className="trip-details">
+            <p className="trip-detail-line"><strong>Departure From Origin:</strong> {trip.attributes['origin-departure']}</p>
+            <p className="trip-detail-line"><strong>Destination:</strong>  {trip.attributes.destination}</p>
+            <Button
+              variant="raised"
+              color="primary"
+              size="small"
+              onClick={() => props.selectTrip(trip.id)}
+            > See arrivals on map
+            </Button>
         </div>
 
         <div className="favorite-buttons">
