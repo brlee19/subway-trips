@@ -34,6 +34,7 @@ class App extends Component {
     this.removeLineFromFavorites = this.removeLineFromFavorites.bind(this);
     this.addTripToFavorites = this.addTripToFavorites.bind(this);
     this.removeTripFromFavorites = this.removeTripFromFavorites.bind(this);
+    this.shouldDisplayTrip = this.shouldDisplayTrip.bind(this);
   }
 
   async componentDidMount() {
@@ -134,16 +135,27 @@ class App extends Component {
     });
   }
 
+  shouldDisplayTrip(trip) {
+    const { trips, lines } = this.state;
+    return trips.visible.includes(trip.id) && lines.visible.includes(trip.attributes.route);
+  }
+
   render() {
+    const allTrips = this.state.trips.all;
     return (
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Subway Trip Planner</h1>
         </header>
 
+        <div className="filter-controls">
+          <button>See fave trips only</button>
+          <button>See fave lines only</button>
+        </div>
+
         <div className="trips-container">
-          {this.state.trips.all.filter(trip => this.state.trips.visible.includes(trip.id))
-                               .map(trip => (
+          {allTrips.filter(trip => this.shouldDisplayTrip(trip))
+                   .map(trip => (
             <Trip key={trip.id}
                   trip={trip}
                   selectTrip={this.selectTrip}
@@ -159,7 +171,6 @@ class App extends Component {
                     this.state.trips.favorites.includes(trip.id) ?
                     this.removeTripFromFavorites : this.addTripToFavorites
                   }
-
             />
           ))}
         </div>
