@@ -4,9 +4,9 @@ import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
 
 const Trip = (props) => {
-  const { trip } = props
+  const { trip, isFavorite } = props
   return (
-    <Paper elevation="5">
+    <Paper elevation={5}>
       <div className="trip-wrapper" key={trip.id} onClick={() => props.selectTrip(trip.id)}>
         <div className="line-picture"> 
           <img
@@ -28,7 +28,7 @@ const Trip = (props) => {
             color="primary"
             size="small"
           >
-          ♡ Line 💛
+          { isFavorite.line ? '💛 Line': '♡ Line' }
           </Button>
           <Button
               onClick={() => {props.toggleTripFromFavorites(trip)}}
@@ -36,7 +36,7 @@ const Trip = (props) => {
               color="primary"
               size="small"
           >
-           ♡ Trip
+           { isFavorite.trip ? '💛 Trip': '♡ Trip' }
           </Button>
         </div>
       </div>

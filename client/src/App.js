@@ -123,6 +123,10 @@ class App extends Component {
             <Trip key={trip.id}
                   trip={trip}
                   selectTrip={this.selectTrip}
+                  isFavorite={{
+                    line: this.state.favorites.lines.includes(trip.attributes.route),
+                    trip: this.state.favorites.trips.includes(trip.id)
+                  }}
                   toggleLineFromFavorites={
                     this.state.favorites.lines.includes(trip.attributes.route) ?
                     this.removeLineFromFavorites : this.addLineToFavorites 
