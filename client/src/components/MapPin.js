@@ -13,7 +13,7 @@ class MapPin extends Component {
     console.log('rendering map pin!')
     return (
       <div className="map-pin">
-        <img src="/public-transport-subway.png" onClick={() => this.props.handleClick(this.props.arrival.id)}></img>
+        <img src="/public-transport-subway.png" alt="Subway Icon" onClick={() => this.props.handleClick(this.props.arrival.id)}></img>
       </div>
     )
   }

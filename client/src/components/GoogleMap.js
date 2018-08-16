@@ -6,7 +6,6 @@ import ArrivalInfo from './ArrivalInfo.js';
 import MapPin from './MapPin.js';
 
 class GoogleMap extends Component {
-  // rewrite to functional if no need for state
   constructor(props) {
     super(props);
     this.state = {
@@ -23,13 +22,13 @@ class GoogleMap extends Component {
   }
 
   render() {
-    const { arrivals } = this.props;
+    const { arrivals, center } = this.props;
     return (
       <div style={{ height: '100vh', width: '100%' }}>
         <ArrivalInfo arrival={arrivals.filter(arrival => arrival.id === this.state.selectedArrival)[0]}/>
         <GoogleMapReact
           bootstrapURLKeys={{ key: googleAPIKey }}
-          center={this.props.center}
+          center={center}
           defaultZoom={11}
         >
         {arrivals.map(arrival => (
