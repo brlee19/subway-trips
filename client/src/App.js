@@ -4,6 +4,10 @@ import Trip from './components/Trip.js';
 import GoogleMap from './components/GoogleMap.js';
 import { calculateCentralCoordinates } from './utils/utils.js';
 
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+
 import axios from 'axios';
 
 class App extends Component {
@@ -22,6 +26,10 @@ class App extends Component {
         favorites: [],
         visible: []
       },
+      switches: {
+        favoriteTrips: false,
+        favoriteLines: false
+      },
       visibility: 'all', // can also be 'favoriteTrips' or 'favoriteLines' 
       mapCenter: { // remove if unable to make map center dynamic
         lat: 40.7128,
@@ -39,6 +47,8 @@ class App extends Component {
     this.resetTripVisibility = this.resetTripVisibility.bind(this);
     this.displayFavoriteLinesOnly = this.displayFavoriteLinesOnly.bind(this);
     this.resetLineVisibility = this.resetLineVisibility.bind(this);
+    this.toggleTripVisibility = this.toggleTripVisibility.bind(this);
+    this.toggleLineVisibility = this.toggleLineVisibility.bind(this);
   }
 
   async componentDidMount() {
@@ -162,6 +172,23 @@ class App extends Component {
     })
   }
 
+  toggleTripVisibility() {
+    // only checks to see if visible trips length is less than all
+    // may not work anymore if more complex visibilities are set
+    if (this.state.trips.visible.length !== this.state.trips.all.length) {
+      this.resetTripVisibility();
+    } else {
+      this.displayFavoriteTripsOnly();
+    }
+
+    this.setState({
+      switches: {
+        ...this.state.switches,
+        favoriteTrips: !this.state.switches.favoriteTrips
+      }
+    });
+  }
+
   displayFavoriteLinesOnly() {
     this.setState({
       lines: {
@@ -180,6 +207,21 @@ class App extends Component {
     })
   }
 
+  toggleLineVisibility() {
+    if (this.state.lines.visible.length !== this.state.lines.all.length) {
+      this.resetLineVisibility();
+    } else {
+      this.displayFavoriteLinesOnly();
+    }
+
+    this.setState({
+      switches: {
+        ...this.state.switches,
+        favoriteLines: !this.state.switches.favoriteLines
+      }
+    });
+  }
+
   render() {
     const allTrips = this.state.trips.all;
     return (
@@ -189,10 +231,27 @@ class App extends Component {
         </header>
 
         <div className="filter-controls">
-          <button onClick={this.displayFavoriteTripsOnly}>See fave trips only</button>
-          <button onClick={this.resetTripVisibility}>See all trips again</button>
-          <button onClick={this.displayFavoriteLinesOnly}>See fave lines only</button>
-          <button onClick={this.resetLineVisibility}>See all lines again</button>
+          <FormGroup row className="filter-buttons">
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={this.state.switches.favoriteTrips}
+                  onChange={this.toggleTripVisibility}
+                  value="checkedA"
+                />
+              }
+              label="Show favorite trips only"
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={this.state.switches.favoriteLines}
+                  onChange={this.toggleLineVisibility}
+                />
+              }
+            label="Show favorite lines only"
+            />
+          </FormGroup>
         </div>
 
         <div className="trips-container">
