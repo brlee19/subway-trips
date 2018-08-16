@@ -35,6 +35,10 @@ class App extends Component {
     this.addTripToFavorites = this.addTripToFavorites.bind(this);
     this.removeTripFromFavorites = this.removeTripFromFavorites.bind(this);
     this.shouldDisplayTrip = this.shouldDisplayTrip.bind(this);
+    this.displayFavoriteTripsOnly = this.displayFavoriteTripsOnly.bind(this);
+    this.resetTripVisibility = this.resetTripVisibility.bind(this);
+    this.displayFavoriteLinesOnly = this.displayFavoriteLinesOnly.bind(this);
+    this.resetLineVisibility = this.resetLineVisibility.bind(this);
   }
 
   async componentDidMount() {
@@ -140,6 +144,42 @@ class App extends Component {
     return trips.visible.includes(trip.id) && lines.visible.includes(trip.attributes.route);
   }
 
+  displayFavoriteTripsOnly() {
+    this.setState({
+      trips: {
+        ...this.state.trips,
+        visible: [...this.state.trips.favorites]
+      }
+    });
+  }
+
+  resetTripVisibility() {
+    this.setState({
+      trips: {
+        ...this.state.trips,
+        visible: [...this.state.trips.all.map(trip => trip.id)]
+      }
+    })
+  }
+
+  displayFavoriteLinesOnly() {
+    this.setState({
+      lines: {
+        ...this.state.lines,
+        visible: [...this.state.lines.favorites]
+      }
+    });
+  }
+
+  resetLineVisibility() {
+    this.setState({
+      lines: {
+        ...this.state.lines,
+        visible: [...this.state.lines.all]
+      }
+    })
+  }
+
   render() {
     const allTrips = this.state.trips.all;
     return (
@@ -149,8 +189,10 @@ class App extends Component {
         </header>
 
         <div className="filter-controls">
-          <button>See fave trips only</button>
-          <button>See fave lines only</button>
+          <button onClick={this.displayFavoriteTripsOnly}>See fave trips only</button>
+          <button onClick={this.resetTripVisibility}>See all trips again</button>
+          <button onClick={this.displayFavoriteLinesOnly}>See fave lines only</button>
+          <button onClick={this.resetLineVisibility}>See all lines again</button>
         </div>
 
         <div className="trips-container">
