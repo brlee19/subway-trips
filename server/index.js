@@ -3,7 +3,8 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 8080;
 const axios = require('axios');
-const url = 'https://nooklyn-interview.herokuapp.com/'
+const Qs = require('Qs');
+const url = 'https://nooklyn-interview.herokuapp.com/';
 
 // app.use(express.static(__dirname + '/../client/build'));
 
@@ -18,13 +19,24 @@ app.get('/api/hello', (req, res) => {
 // get arrivals for a specific trip
 // database to save favorites
 app.get('/api/trips', async(req, res) => {
+  // proxy the params to API
+  // const params = {}
+  // if (req.query && req.query.page) {
+  //   params.page = req.query.page
+  // };
+  console.log('req.query is', req.query)
   try {
-    const {data} = await axios.get(url + '/trips');
+    const {data} = await axios.get(url + '/trips', {  params:req.query, paramsSerializer: function(params) {
+      return Qs.stringify(params, {arrayFormat: 'brackets'})
+    },});
     res.send(data);
   } catch (e) {
     console.error('error is', e);
     res.status(500).send('Error trying to access external API');
+    //error handling?
   };
+
+  //clean up data when receiving, otherwise server isn't doing much
 });
 
 app.get('/api/trips/:tripId/arrivals', async(req, res) => {
@@ -53,15 +65,33 @@ app.get('/api/tripz/all', async(req, res) => {
   //   console.log('error is', e)
   // }
 
-  const query1 = axios.get("https://nooklyn-interview.herokuapp.com/trips?page%5Bnumber%5D=1&page%5Bsize%5D=20")
-  const query2 = axios.get("https://nooklyn-interview.herokuapp.com/trips?page%5Bnumber%5D=2&page%5Bsize%5D=20")
-  const query3 = axios.get("https://nooklyn-interview.herokuapp.com/trips?page%5Bnumber%5D=3&page%5Bsize%5D=20")
-  const query4 = axios.get("https://nooklyn-interview.herokuapp.com/trips?page%5Bnumber%5D=4&page%5Bsize%5D=20")
-  const query5 = axios.get("https://nooklyn-interview.herokuapp.com/trips?page%5Bnumber%5D=5&page%5Bsize%5D=20")
-  const query6 = axios.get("https://nooklyn-interview.herokuapp.com/trips?page%5Bnumber%5D=6&page%5Bsize%5D=20")
+  //get first page
+  const firstPageResults = await axios.get(url + '/trips');
 
-  const results = await Promise.all([query1, query2, query3, query4, query5, query6]);
-  console.log(results.map(result => result.data.data.map(data => data.id)))
+  // make util fn that returns the pages array
+  console.log(firstPageResults.data);
+  const lastPageURL = new URL(firstPageResults.data.links.last);
+  const maxPageNumber = lastPageURL.searchParams.get('page[number]');
+  console.log('maxpageNumber is', maxPageNumber)
+  const pageNums = Array.from(Array(Number(maxPageNumber)), (_, i) => i + 1);
+  console.log('pageNums are', pageNums);
+  const requests = pageNums.map(num => axios.get(url + '/trips', {params: {
+    'page[number]': num
+  }}));
+
+  // get the max results per page data
+  // create an array from page 2 to 
+
+  // const query1 = axios.get("https://nooklyn-interview.herokuapp.com/trips?page%5Bnumber%5D=1&page%5Bsize%5D=20")
+  // const query2 = axios.get("https://nooklyn-interview.herokuapp.com/trips", {params: {'page[number]': 2}});
+  // const query3 = axios.get("https://nooklyn-interview.herokuapp.com/trips?page%5Bnumber%5D=3&page%5Bsize%5D=20")
+  // const query4 = axios.get("https://nooklyn-interview.herokuapp.com/trips?page%5Bnumber%5D=4&page%5Bsize%5D=20")
+  // const query5 = axios.get("https://nooklyn-interview.herokuapp.com/trips?page%5Bnumber%5D=5&page%5Bsize%5D=20")
+  // const query6 = axios.get("https://nooklyn-interview.herokuapp.com/trips?page%5Bnumber%5D=6&page%5Bsize%5D=20")
+
+  const results = await Promise.all(requests);
+  console.log(results.length);
+  // console.log(results)
 
   res.send('ok')
 })
