@@ -3,6 +3,7 @@ import './App.css';
 import { fetchTrips, fetchArrivals } from './utils/utils.js'; //rename to APIs
 import Trip from './components/Trip.js';
 import GoogleMap from './components/GoogleMap.js';
+import FavoriteSwitches from './components/FavoriteSwitches.js';
 import { calculateCentralCoordinates } from './utils/utils.js'; //necessary?
 
 import FormGroup from '@material-ui/core/FormGroup';
@@ -30,11 +31,11 @@ class App extends Component {
         favorites: [],
         visible: []
       },
-      switches: {
+      switches: { // needs to be its own state?
         favoriteTrips: false,
         favoriteLines: false
       },
-      visibility: 'all', // can also be 'favoriteTrips' or 'favoriteLines' 
+      visibility: 'all', // can also be 'favoriteTrips' or 'favoriteLines' ... needed?
       mapCenter: { // remove if unable to make map center dynamic
         lat: 40.7128,
         lng: -74.0060
@@ -92,7 +93,6 @@ class App extends Component {
 
     try {
       const response = await fetchArrivals(id);
-      console.log('arrivals are', response.data.data)
       this.setState({
         trips: {
           ...this.state.trips,
@@ -244,6 +244,10 @@ class App extends Component {
         </header>
 
         <div className="filter-controls">
+        <FavoriteSwitches
+          checked={this.state.switches.favoriteTrips}
+          onChange={this.toggleTripVisibility}
+        />
         {/* TODO add to own component! */}
           <FormGroup row className="filter-buttons">
             <FormControlLabel
