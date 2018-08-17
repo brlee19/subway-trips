@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const calculateCentralCoordinates = (arrivals) => {
   // test case: works even when some coordinates are null
   const arrivalsWithCoordinates = arrivals.filter((arrival) => {
@@ -16,4 +18,16 @@ export const calculateCentralCoordinates = (arrivals) => {
     lat: sumCoords[0] / arrivalsWithCoordinates.length,
     long: sumCoords[1] / arrivalsWithCoordinates.length
   };
+};
+
+// assemble query
+// make API call with the given query and return the trips to state
+
+export const fetchTrips = () => {
+  return axios.get('https://nooklyn-interview.herokuapp.com/trips');
+};
+
+export const fetchArrivals = (tripId) => {
+  return axios.get(`https://nooklyn-interview.herokuapp.com/trips/${tripId}/arrivals`);
 }
+// API call for arrivals given a specific trip

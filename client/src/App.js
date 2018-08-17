@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
+import { fetchTrips, fetchArrivals } from './utils/utils.js'; //rename to APIs
 import Trip from './components/Trip.js';
 import GoogleMap from './components/GoogleMap.js';
-import { calculateCentralCoordinates } from './utils/utils.js';
+import { calculateCentralCoordinates } from './utils/utils.js'; //necessary?
 
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -14,6 +15,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
+      //need links state
       arrivals: [],
       trips : {
         all: [],
@@ -54,7 +56,7 @@ class App extends Component {
   async componentDidMount() {
     // keep here because this call should only be made once per app lifecycle
     try {
-      const response = await axios.get('/api/trips');
+      const response = await fetchTrips();
       const uniqueLines = [...new Set(response.data.data.map(trip => trip.attributes.route))];
       console.log('uniqueLines are', uniqueLines)
       this.setState({
@@ -78,7 +80,7 @@ class App extends Component {
     if (id === this.state.trips.selected) return;
 
     try {
-      const response = await axios.get(`/api/trips/${id}/arrivals`);
+      const response = await fetchArrivals(id);
       console.log('arrivals are', response.data.data)
       this.setState({
         trips: {
@@ -231,6 +233,7 @@ class App extends Component {
         </header>
 
         <div className="filter-controls">
+        {/* TODO add to own component! */}
           <FormGroup row className="filter-buttons">
             <FormControlLabel
               control={
@@ -255,6 +258,8 @@ class App extends Component {
         </div>
 
         <div className="trips-container">
+          <button>Previous</button>
+          <button>Next</button>
           {allTrips.filter(trip => this.shouldDisplayTrip(trip))
                    .map(trip => (
             <Trip key={trip.id}
