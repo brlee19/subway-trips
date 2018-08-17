@@ -9,18 +9,20 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
-import axios from 'axios';
-
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      //need links state
+      api: { //state needed to format query to api
+        page: null,
+        sort: null,
+        filters: []
+      },
       arrivals: [],
       trips : {
         all: [],
         selected: '',
-        favorites: [],
+        favorites: [], //needs to store entire trip object
         visible: []
       },
       lines: {
@@ -39,6 +41,7 @@ class App extends Component {
       },
     };
 
+    this.getTrips = this.getTrips.bind(this);
     this.selectTrip = this.selectTrip.bind(this);
     this.addLineToFavorites = this.addLineToFavorites.bind(this);
     this.removeLineFromFavorites = this.removeLineFromFavorites.bind(this);
@@ -54,12 +57,20 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    // keep here because this call should only be made once per app lifecycle
+    this.getTrips({page: 1}); //empty object meaning no specific trip params applied
+  }
+
+  async getTrips(tripParams) { // custom obj
     try {
-      const response = await fetchTrips();
+      const response = await fetchTrips(tripParams);
       const uniqueLines = [...new Set(response.data.data.map(trip => trip.attributes.route))];
       console.log('uniqueLines are', uniqueLines)
       this.setState({
+        api: {
+          page: tripParams.page || null, // so the state object keeps its shape
+          sort: tripParams.sort || null,
+          filters: tripParams.filters || []
+        },
         trips: {
           ...this.state.trips,
           all: response.data.data,
@@ -72,7 +83,7 @@ class App extends Component {
         }
       });
     } catch(e) {
-      console.error('error getting all trips', e)
+      console.error('error getting all trips', e) // have error state to display error in UI?
     }
   }
 
@@ -258,8 +269,12 @@ class App extends Component {
         </div>
 
         <div className="trips-container">
-          <button>Previous</button>
-          <button>Next</button>
+          <button onClick={() => this.getTrips({
+            page: this.state.api.page - 1
+          })}>Previous</button>
+          <button onClick={() => this.getTrips({ //move out of inline, validate, keep rest of params
+            page: this.state.api.page + 1
+          })}>Next</button>
           {allTrips.filter(trip => this.shouldDisplayTrip(trip))
                    .map(trip => (
             <Trip key={trip.id}

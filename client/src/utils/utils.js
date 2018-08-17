@@ -23,8 +23,12 @@ export const calculateCentralCoordinates = (arrivals) => {
 // assemble query
 // make API call with the given query and return the trips to state
 
-export const fetchTrips = () => {
-  return axios.get('https://nooklyn-interview.herokuapp.com/trips');
+export const fetchTrips = (apiState) => {
+  const { page } = apiState;
+  // add more query assembly logic
+  return axios.get('https://nooklyn-interview.herokuapp.com/trips', {params: {
+    'page[number]': page
+  }});
 };
 
 export const fetchArrivals = (tripId) => {
