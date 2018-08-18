@@ -6,10 +6,6 @@ import GoogleMap from './components/GoogleMap.js';
 import FavoriteSwitches from './components/FavoriteSwitches.js';
 import { calculateCentralCoordinates } from './utils/utils.js'; //necessary?
 
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-
 class App extends Component {
   constructor() {
     super();
@@ -80,6 +76,10 @@ class App extends Component {
           ...this.state.lines,
           all: [...uniqueLines],
           visible: [...uniqueLines]
+        },
+        switches: { // reset visibility to show current page trips
+          favoriteTrips: false,
+          favoriteLines: false
         }
       });
     } catch(e) {
@@ -152,14 +152,16 @@ class App extends Component {
     this.setState({
       trips: {
         ...this.state.trips,
-        favorites: this.state.trips.favorites.filter(faveTrip => faveTrip.id !== trip.id)
+        favorites: this.state.trips.favorites.filter(faveTrip => faveTrip.id !== trip.id),
+        visibleIds: this.state.trips.visibleIds.filter(visibleId => visibleId !== trip.id)
       }
     });
   }
 
   shouldDisplayTrip(trip) {
-    const { trips, lines } = this.state;
-    return trips.visibleIds.includes(trip.id) && lines.visible.includes(trip.attributes.route);
+    const { trips, lines } = this.state; //add line logic back in later
+    console.log('determing whether or not to display trip', trip.id, trips.visibleIds.includes(trip.id));
+    return trips.visibleIds.includes(trip.id);
   }
 
   displayFavoriteTripsOnly() {
@@ -230,7 +232,13 @@ class App extends Component {
   }
 
   render() {
-    const allTrips = this.state.trips.currentPage;
+    // const allTrips = Array.from(new Set([...this.state.trips.currentPage, ...this.state.trips.favorites]));
+    const allTrips = [...this.state.trips.currentPage, ...this.state.trips.favorites].reduce((uniqueTrips, trip) => {
+      if (!uniqueTrips.map(uniqueTrip => uniqueTrip.id).includes(trip.id)) uniqueTrips.push(trip);
+      return uniqueTrips;
+    }, []); //unit test this for uniqueness!
+    console.log('allTripIds are', allTrips.map(trip => trip.id))
+    console.log('uniqueTrips are', JSON.stringify(allTrips))
     return (
       <div className="App">
         <header className="App-header">
@@ -242,31 +250,10 @@ class App extends Component {
           checked={this.state.switches.favoriteTrips}
           onChange={this.toggleTripVisibility}
         />
-        {/* TODO add to own component! */}
-          <FormGroup row className="filter-buttons">
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={this.state.switches.favoriteTrips}
-                  onChange={this.toggleTripVisibility}
-                  value="checkedA"
-                />
-              }
-              label="Show favorite trips only"
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={this.state.switches.favoriteLines}
-                  onChange={this.toggleLineVisibility}
-                />
-              }
-            label="Show favorite lines only"
-            />
-          </FormGroup>
         </div>
 
         <div className="trips-container">
+          {/* these buttons should get the previous/next pages of favorites when in favorite trips mode */}
           <button onClick={() => this.getTrips({
             page: this.state.api.page - 1
           })}>Previous</button>
@@ -274,13 +261,15 @@ class App extends Component {
             page: this.state.api.page + 1
           })}>Next</button>
           {allTrips.filter(trip => this.shouldDisplayTrip(trip)) // need to change allTrips to unique trips in currentPage or faves
-                   .map(trip => (
+                   .map(trip => {
+                     console.log('trying to render trip', trip.id)
+                     return (
             <Trip key={trip.id}
                   trip={trip}
                   selectTrip={this.selectTrip}
                   isFavorite={{
                     line: this.state.lines.favorites.includes(trip.attributes.route),
-                    trip: this.state.trips.favorites.includes(trip)
+                    trip: this.state.trips.favorites.map(faveTrip => faveTrip.id).includes(trip.id)
                   }}
                   toggleLineFromFavorites={
                     this.state.lines.favorites.includes(trip.attributes.route) ?
@@ -291,7 +280,7 @@ class App extends Component {
                     this.removeTripFromFavorites : this.addTripToFavorites
                   }
             />
-          ))}
+          )})}
         </div>
 
         <div className="map-container">
