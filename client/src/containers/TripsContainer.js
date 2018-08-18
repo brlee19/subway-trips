@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Trip from '../components/Trip.js';
+import NavButtons from '../components/NavButtons.js';
 import { fetchTrips } from '../actions/apiActions.js';
 import { selectTrip, addTripToFavorites, removeTripFromFavorites,
          addLineToFavorites, removeLineFromFavorites } from '../actions/tripsActions.js';
-import '../App.css';
+
+import '../App.css'; // move to app level?
 
 class TripsContainer extends Component {
   constructor(props) {
@@ -13,32 +15,30 @@ class TripsContainer extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchTrips({page: 1, route: null, sort: 'origin-departure'});
+    this.props.fetchTrips({page: 1, routes: [], sort: 'origin-departure'});
   }
 
   render() {
-    const { trips, lines, visibility } = this.props;
+    const { trips, lines, visibility, api, fetchPage, selectTrip,
+            toggleTripFromFavorites, toggleLineFromFavorites } = this.props;
     const visibleTrips = applyVisibilityFilters(trips, lines, visibility);
     return (
     <div className="trips-container">
-        <button onClick={() => {this.props.fetchPage(this.props.api.page - 1)}}>
-          Get previous page
-        </button>
-        <button onClick={() => {this.props.fetchPage(this.props.api.page + 1)}}>
-          Get next page
-        </button>
-        {visibleTrips.map(trip => (
-          <Trip key={trip.id}
-                trip={trip}
-                selectTrip={(trip) => this.props.selectTrip(trips.selectedId, trip)}
-                isFavorite={{
-                  trip: trips.favorites.map(faveTrip => faveTrip.id).includes(trip.id),
-                  line: lines.favorites.includes(trip.attributes.route)
-                }}
-                toggleTripFromFavorites={this.props.toggleTripFromFavorites}
-                toggleLineFromFavorites={this.props.toggleLineFromFavorites}
-          />
-        ))}
+    {/* nav buttons component? */}
+    {/* NEED DIFFERENT PAGINATION LOGIC IF SHOWING FAVE TRIPS, probably could just be two different components */}
+    <NavButtons api={api} fetchPage={fetchPage}/>
+      {visibleTrips.map(trip => (
+        <Trip key={trip.id}
+              trip={trip}
+              selectTrip={(trip) => selectTrip(trips.selectedId, trip)}
+              isFavorite={{
+                trip: trips.favorites.map(faveTrip => faveTrip.id).includes(trip.id),
+                line: lines.favorites.includes(trip.attributes.route)
+              }}
+              toggleTripFromFavorites={toggleTripFromFavorites}
+              toggleLineFromFavorites={toggleLineFromFavorites}
+        />
+      ))}
     </div>
     )
   }
@@ -70,8 +70,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   fetchTrips: (params) => dispatch(fetchTrips(params)), // i.e. {page: 1, route: null, sort: 'origin-departure'}
-  fetchPage: (page) => {
-    dispatch(fetchTrips({page}));
+  fetchPage: (page, apiState) => {
+    dispatch(fetchTrips({
+      ...apiState, // change only page number
+      page,
+    }));
   },
   selectTrip: (currentSelectedId, trip) => {
     if (currentSelectedId !== trip.id) dispatch(selectTrip(trip));

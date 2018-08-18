@@ -19,7 +19,7 @@ class FavoriteSwitches extends Component {
           value="checkedA"
         />
       }
-      label="Show favorite trips only"
+      label="Show your favorite trips"
     />
     <FormControlLabel
       control={
@@ -28,7 +28,7 @@ class FavoriteSwitches extends Component {
           onChange={this.props.lines.onChange}
         />
       }
-    label="Show favorite lines only"
+    label="Search using your favorite lines only"
     />
   </FormGroup>)
   }

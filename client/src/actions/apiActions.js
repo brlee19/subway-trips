@@ -1,13 +1,13 @@
 import axios from 'axios';
   
 export const fetchTrips = (params) => {
-  const { page, sort, route } = params;
+  const { page, sort, routes } = params;
   return async (dispatch) => {
     // dispatch(requestTrips(apiState)); // not necessary no spinner needed?
     try {
       const response = await axios.get('https://nooklyn-interview.herokuapp.com/trips', {params: {
         'page[number]': page,
-        'filter[route]': route,
+        'filter[route]': routes,
         sort
       }});
       dispatch(receiveTrips(params, response));
