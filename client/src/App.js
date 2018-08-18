@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-import './App.css';
+
 import { fetchTrips, fetchArrivals, formatTrips } from './utils/utils.js'; //rename to APIs
 import Trip from './components/Trip.js';
 import GoogleMap from './components/GoogleMap.js';
 import FavoriteSwitches from './components/FavoriteSwitches.js';
 import { calculateCentralCoordinates } from './utils/utils.js'; //necessary?
+
+import './App.css';
+import ReduxTestComponent from './components/ReduxTestComponent';
+import TripsContainer from './containers/TripsContainer';
 
 class App extends Component {
   constructor() {
@@ -54,7 +58,7 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    const { page, sort, route } = this.state.api;
+    const { page, sort, route } = this.state.api; // this should only be in state if the request succeeded, so should be initialized with null vals
     this.getTrips({
       page,
       sort,
@@ -165,7 +169,6 @@ class App extends Component {
 
   shouldDisplayTrip(trip) {
     const { trips, lines } = this.state; //add line logic back in later
-    console.log('determing whether or not to display trip', trip.id, trips.visibleIds.includes(trip.id));
     return trips.visibleIds.includes(trip.id);
   }
 
@@ -242,8 +245,6 @@ class App extends Component {
       if (!uniqueTrips.map(uniqueTrip => uniqueTrip.id).includes(trip.id)) uniqueTrips.push(trip);
       return uniqueTrips;
     }, []); //unit test this for uniqueness!
-    console.log('allTripIds are', allTrips.map(trip => trip.id))
-    console.log('uniqueTrips are', JSON.stringify(allTrips))
     return (
       <div className="App">
         <header className="App-header">
@@ -256,6 +257,8 @@ class App extends Component {
           onChange={this.toggleTripVisibility}
         />
         </div>
+        <ReduxTestComponent />
+        <TripsContainer />
 
         <div className="trips-container">
           {/* these buttons should get the previous/next pages of favorites when in favorite trips mode */}
@@ -267,7 +270,6 @@ class App extends Component {
           })}>Next</button>
           {allTrips.filter(trip => this.shouldDisplayTrip(trip)) // need to change allTrips to unique trips in currentPage or faves
                    .map(trip => {
-                     console.log('trying to render trip', trip.id)
                      return (
             <Trip key={trip.id}
                   trip={trip}

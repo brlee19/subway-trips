@@ -4,7 +4,7 @@ import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
 
 const Trip = (props) => {
-  const { trip, isFavorite } = props
+  const { trip} = props
   return (
     <Paper elevation={5}>
       <div className="trip-wrapper" key={trip.id}>
@@ -23,12 +23,12 @@ const Trip = (props) => {
               variant="raised"
               color="primary"
               size="small"
-              onClick={() => props.selectTrip(trip.id)}
+              // onClick={() => props.selectTrip(trip.id)}
             > See arrivals on map
             </Button>
         </div>
 
-        <div className="favorite-buttons">
+        {/* <div className="favorite-buttons">
           <Button
             onClick={() => {props.toggleLineFromFavorites(trip)}}
             variant="raised"
@@ -45,7 +45,7 @@ const Trip = (props) => {
           >
            { isFavorite.trip ? '💛 Trip': '♡ Trip' }
           </Button>
-        </div>
+        </div> */}
       </div>
 
     </Paper>
