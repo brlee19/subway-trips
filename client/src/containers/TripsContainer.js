@@ -18,10 +18,15 @@ class TripsContainer extends Component {
 
   render() {
     const { trips, lines, visibility } = this.props;
-    // const allTrips = uniqueTrips([...trips.currentPage, ...trips.favorites]);
     const visibleTrips = applyVisibilityFilters(trips, lines, visibility);
     return (
     <div className="trips-container">
+        <button onClick={() => {this.props.fetchPage(this.props.api.page - 1)}}>
+          Get previous page
+        </button>
+        <button onClick={() => {this.props.fetchPage(this.props.api.page + 1)}}>
+          Get next page
+        </button>
         {visibleTrips.map(trip => (
           <Trip key={trip.id}
                 trip={trip}
@@ -39,13 +44,7 @@ class TripsContainer extends Component {
   }
 }
 
-// const uniqueTrips = (trips) => {
-//   return trips.reduce((uniqueTrips, trip) => {
-//     if (!uniqueTrips.map(uniqueTrip => uniqueTrip.id).includes(trip.id)) uniqueTrips.push(trip);
-//     return uniqueTrips;
-//   }, []);
-// };
-
+// render logic
 const applyVisibilityFilters = (trips, lines, visibility) => {
   const visibleTrips = applyTripFilters(trips, visibility.trips);
   return applyLineFilters(visibleTrips, lines, visibility.lines);
@@ -62,6 +61,7 @@ const applyLineFilters = (trips, lines, lineVisibility) => {
 
 const mapStateToProps = (state) => {
   return {
+    api: state.api,
     trips: state.trips.trips,
     lines: state.trips.lines,
     visibility: state.trips.visibility
@@ -70,6 +70,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   fetchTrips: (params) => dispatch(fetchTrips(params)), // i.e. {page: 1, route: null, sort: 'origin-departure'}
+  fetchPage: (page) => {
+    dispatch(fetchTrips({page}));
+  },
   selectTrip: (currentSelectedId, trip) => {
     if (currentSelectedId !== trip.id) dispatch(selectTrip(trip));
   },
