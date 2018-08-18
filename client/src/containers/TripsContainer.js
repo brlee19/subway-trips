@@ -26,7 +26,7 @@ class TripsContainer extends Component {
     <div className="trips-container">
     {/* nav buttons component? */}
     {/* NEED DIFFERENT PAGINATION LOGIC IF SHOWING FAVE TRIPS, probably could just be two different components */}
-    <NavButtons api={api} fetchPage={fetchPage}/>
+    <NavButtons source={api.source} fetchPage={fetchPage}/>
       {visibleTrips.map(trip => (
         <Trip key={trip.id}
               trip={trip}

@@ -1,11 +1,18 @@
 const initialState = {
-  pages: {
-    current: null,
-    first: null,
-    last: null
+  source: { // the current source of data in the app
+    pages: {
+      current: null,
+      first: null,
+      last: null
+    },
+    sort: null,
+    routes: [],
   },
-  sort: null,
-  routes: [],
+  nextParams: { // the params being modified by the user before the request is sent off to the API
+    page: 1,
+    sort: 'origin-departure',
+    routes: []
+  }
 };
 
 const api = (state = initialState, action) => {
@@ -17,13 +24,15 @@ const api = (state = initialState, action) => {
       const lastURL = new URL(links.last);
       return {
         ...state,
-        pages: {
-          current: page || null,
-          first: Number(firstURL.searchParams.get('page[number]')),
-          last: Number(lastURL.searchParams.get('page[number]')),
-        },
-        sort: sort || null,
-        routes: routes || [] 
+        source: {
+          pages: {
+            current: page || null,
+            first: Number(firstURL.searchParams.get('page[number]')),
+            last: Number(lastURL.searchParams.get('page[number]')),
+          },
+          sort: sort || null,
+          routes: routes || []
+        }
       };
     }
 
