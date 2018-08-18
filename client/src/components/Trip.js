@@ -23,7 +23,7 @@ const Trip = (props) => {
               variant="raised"
               color="primary"
               size="small"
-              // onClick={() => props.selectTrip(trip.id)}
+              onClick={() => props.selectTrip(trip)}
             > See arrivals on map
             </Button>
         </div>

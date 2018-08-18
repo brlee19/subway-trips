@@ -10,7 +10,6 @@ const initialState = {
 const trips = (state = initialState, action) => {
   switch (action.type) {
     case 'RECEIVE_TRIPS': {
-      alert('got to the trips reducer!')
       const fetchedTrips = formatTrips(action.payload.response.data.data);
       return {
         ...state,
@@ -18,6 +17,14 @@ const trips = (state = initialState, action) => {
         visibleIds: fetchedTrips.map(trip => trip.id)
       };
     }
+
+    case 'RECEIVE_ARRIVALS': {
+      return {
+        ...state,
+        selectedId: action.payload.tripId
+      };
+    }
+
     default:
       return state;
   }
