@@ -7,14 +7,6 @@ import Switch from '@material-ui/core/Switch';
 class FavoriteSwitches extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      trips: false,
-      lines: false
-    }
-  }
-
-  handleChange() {
-    this.props.toggleTripVisibility();
   }
 
   render(){
@@ -22,22 +14,22 @@ class FavoriteSwitches extends Component {
     <FormControlLabel
       control={
         <Switch
-          checked={this.props.checked}
-          onChange={this.props.onChange}
+          checked={this.props.trips.checked}
+          onChange={this.props.trips.onChange}
           value="checkedA"
         />
       }
       label="Show favorite trips only"
     />
-    {/* <FormControlLabel
+    <FormControlLabel
       control={
         <Switch
-          checked={this.state.switches.favoriteLines}
-          onChange={this.props.toggleLineVisibility}
+          checked={this.props.lines.checked}
+          onChange={this.props.lines.onChange}
         />
       }
     label="Show favorite lines only"
-    /> */}
+    />
   </FormGroup>)
   }
 }

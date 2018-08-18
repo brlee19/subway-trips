@@ -53,3 +53,35 @@ export const displayCurrentPageTrips = () => {
     type: 'DISPLAY_CURRENT_PAGE_TRIPS'
   };
 };
+
+export const addLineToFavorites = (line) => {
+  return {
+    type: 'ADD_FAVORITE_LINE',
+    payload: {
+      line
+    }
+  };
+};
+
+
+export const removeLineFromFavorites = (line) => {
+  return {
+    type: 'REMOVE_FAVORITE_LINE',
+    payload: {
+      line
+    }
+  };
+};
+
+
+export const displayFavoriteLines = () => {
+  return {
+    type: 'DISPLAY_FAVORITE_LINES'
+  };
+};
+
+export const displayAllLines = () => {
+  return {
+    type: 'DISPLAY_ALL_LINES'
+  };
+};

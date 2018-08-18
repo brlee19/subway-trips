@@ -29,21 +29,21 @@ const Trip = (props) => {
         </div>
 
         <div className="favorite-buttons">
-          {/* <Button
-            onClick={() => {props.toggleLineFromFavorites(trip)}}
+          <Button
+            onClick={() => {props.toggleLineFromFavorites(isFavorite.line, trip.attributes.route)}}
             variant="raised"
             color="primary"
             size="small"
           >
           { isFavorite.line ? '💛 Line': '♡ Line' }
-          </Button> */}
+          </Button>
           <Button
-              onClick={() => {props.toggleTripFromFavorites(isFavorite, trip)}}
+              onClick={() => {props.toggleTripFromFavorites(isFavorite.trip, trip)}}
               variant="raised"
               color="primary"
               size="small"
           >
-           { isFavorite ? '💛 Trip': '♡ Trip' }
+           { isFavorite.trip ? '💛 Trip': '♡ Trip' }
           </Button>
         </div>
       </div>

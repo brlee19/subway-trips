@@ -6,40 +6,11 @@ import FavoriteSwitches from './components/FavoriteSwitches.js';
 
 import './App.css';
 import TripsContainer from './containers/TripsContainer';
-import { displayFavoriteTrips, displayCurrentPageTrips } from './actions/tripsActions';
+import { displayFavoriteTrips, displayCurrentPageTrips, displayFavoriteLines, displayAllLines } from './actions/tripsActions';
 
 class App extends Component {
   constructor() {
     super();
-  }
-
-  addLineToFavorites(trip) {
-    const line = trip.attributes.route;
-    if (this.state.lines.favorites.includes(line)) return;
-
-    this.setState({
-      lines: {
-        ...this.state.lines,
-        favorites: [
-          ...this.state.lines.favorites,
-          line
-        ]
-      }
-    });
-  }
-
-  removeLineFromFavorites(trip) {
-    const line = trip.attributes.route;
-    if (!this.state.lines.favorites.includes(line)) return;
-
-    this.setState({
-      lines: {
-        ...this.state.lines,
-        favorites: [
-          this.state.lines.favorites.filter(favLine => favLine !== line)
-        ]
-      }
-    });
   }
 
   resetLineVisibility() {
@@ -75,8 +46,15 @@ class App extends Component {
 
         <div className="filter-controls">
         <FavoriteSwitches
-          checked={this.props.trips.visibility === 'favorites'}
-          onChange={this.props.trips.visibility === 'favorites' ? this.props.displayCurrentPageTrips : this.props.displayFavoriteTrips}
+          trips={{
+            checked: this.props.trips.visibility.trips === 'favorites',
+            onChange: this.props.trips.visibility.trips === 'favorites' ? this.props.displayCurrentPageTrips : this.props.displayFavoriteTrips
+          }}
+          lines={{
+            checked: this.props.trips.visibility.lines === 'favorites',
+            onChange: this.props.trips.visibility.lines === 'favorites' ? this.props.displayAllLines : this.props.displayFavoriteLines
+          }}
+          
         />
         </div>
         <TripsContainer />
@@ -126,7 +104,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   displayFavoriteTrips: () => dispatch(displayFavoriteTrips()),
-  displayCurrentPageTrips: () => dispatch(displayCurrentPageTrips())
+  displayCurrentPageTrips: () => dispatch(displayCurrentPageTrips()),
+  displayFavoriteLines: () => dispatch(displayFavoriteLines()),
+  displayAllLines: () => dispatch(displayAllLines())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
