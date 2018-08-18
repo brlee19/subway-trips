@@ -21,10 +21,10 @@ class App extends Component {
       },
       arrivals: [],
       trips : {
-        all: [],
-        selected: '',
+        currentPage: [],
         favorites: [], //needs to store entire trip object
-        visible: []
+        selectedId: '',
+        visibleIds: []
       },
       lines: {
         all: [],
@@ -39,7 +39,7 @@ class App extends Component {
       mapCenter: { // remove if unable to make map center dynamic
         lat: 40.7128,
         lng: -74.0060
-      },
+      }
     };
 
     this.getTrips = this.getTrips.bind(this);
@@ -65,7 +65,6 @@ class App extends Component {
     try {
       const response = await fetchTrips(tripParams);
       const uniqueLines = [...new Set(response.data.data.map(trip => trip.attributes.route))];
-      console.log('uniqueLines are', uniqueLines)
       this.setState({
         api: {
           page: tripParams.page || null, // so the state object keeps its shape
@@ -74,8 +73,8 @@ class App extends Component {
         },
         trips: {
           ...this.state.trips,
-          all: response.data.data,
-          visible: response.data.data.map(trip => trip.id)
+          currentPage: response.data.data,
+          visibleIds: response.data.data.map(trip => trip.id)
         },
         lines: {
           ...this.state.lines,
@@ -136,42 +135,38 @@ class App extends Component {
   }
 
   addTripToFavorites(trip) {
-    const tripId = trip.id;
-    if (this.state.trips.favorites.includes(tripId)) return;
-
+    if (this.state.trips.favorites.map(faveTrip => faveTrip.id).includes(trip.id)) return; // can refactor to sep fn like hasMatchingId
     this.setState({
       trips: {
         ...this.state.trips,
         favorites: [
           ...this.state.trips.favorites,
-          tripId
+          trip
         ]
       }
     });
   }
 
   removeTripFromFavorites(trip) {
-    const tripId = trip.id;
-    if (!this.state.trips.favorites.includes(tripId)) return;
-    
+    if (!this.state.trips.favorites.map(faveTrip => faveTrip.id).includes(trip.id)) return;
     this.setState({
       trips: {
         ...this.state.trips,
-        favorites: this.state.trips.favorites.filter(faveTrip => faveTrip !== tripId)
+        favorites: this.state.trips.favorites.filter(faveTrip => faveTrip.id !== trip.id)
       }
     });
   }
 
   shouldDisplayTrip(trip) {
     const { trips, lines } = this.state;
-    return trips.visible.includes(trip.id) && lines.visible.includes(trip.attributes.route);
+    return trips.visibleIds.includes(trip.id) && lines.visible.includes(trip.attributes.route);
   }
 
   displayFavoriteTripsOnly() {
     this.setState({
       trips: {
         ...this.state.trips,
-        visible: [...this.state.trips.favorites]
+        visibleIds: [...this.state.trips.favorites.map(faveTrip => faveTrip.id)]
       }
     });
   }
@@ -180,21 +175,20 @@ class App extends Component {
     this.setState({
       trips: {
         ...this.state.trips,
-        visible: [...this.state.trips.all.map(trip => trip.id)]
+        visibleIds: [...this.state.trips.currentPage.map(trip => trip.id)]
       }
     })
   }
 
   toggleTripVisibility() {
-    // only checks to see if visible trips length is less than all
-    // may not work anymore if more complex visibilities are set
-    if (this.state.trips.visible.length !== this.state.trips.all.length) {
+    // TODO: Change! not robust enough logic, prob best to store current vis filter in state
+    if (this.state.trips.visibleIds.length !== this.state.trips.currentPage.length) {
       this.resetTripVisibility();
     } else {
       this.displayFavoriteTripsOnly();
     }
 
-    this.setState({
+    this.setState({ // maybe can just be local state
       switches: {
         ...this.state.switches,
         favoriteTrips: !this.state.switches.favoriteTrips
@@ -236,7 +230,7 @@ class App extends Component {
   }
 
   render() {
-    const allTrips = this.state.trips.all;
+    const allTrips = this.state.trips.currentPage;
     return (
       <div className="App">
         <header className="App-header">
@@ -279,21 +273,21 @@ class App extends Component {
           <button onClick={() => this.getTrips({ //move out of inline, validate, keep rest of params
             page: this.state.api.page + 1
           })}>Next</button>
-          {allTrips.filter(trip => this.shouldDisplayTrip(trip))
+          {allTrips.filter(trip => this.shouldDisplayTrip(trip)) // need to change allTrips to unique trips in currentPage or faves
                    .map(trip => (
             <Trip key={trip.id}
                   trip={trip}
                   selectTrip={this.selectTrip}
                   isFavorite={{
                     line: this.state.lines.favorites.includes(trip.attributes.route),
-                    trip: this.state.trips.favorites.includes(trip.id)
+                    trip: this.state.trips.favorites.includes(trip)
                   }}
                   toggleLineFromFavorites={
                     this.state.lines.favorites.includes(trip.attributes.route) ?
                     this.removeLineFromFavorites : this.addLineToFavorites 
                   }
                   toggleTripFromFavorites={
-                    this.state.trips.favorites.includes(trip.id) ?
+                    this.state.trips.favorites.map(faveTrip => faveTrip.id).includes(trip.id) ?
                     this.removeTripFromFavorites : this.addTripToFavorites
                   }
             />
