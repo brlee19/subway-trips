@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 
 import MapContainer from './containers/MapContainer.js';
 import FavoriteSwitches from './components/FavoriteSwitches.js';
+import LineFilter from './components/LineFilter.js';
 
 import './App.css';
 import TripsContainer from './containers/TripsContainer';
 import { displayFavoriteTrips, displayCurrentPageTrips, displayFavoriteLines, displayAllLines } from './actions/tripsActions';
+import { addLineToFilter, fetchTrips } from './actions/apiActions.js';
 
 class App extends Component {
   constructor() {
@@ -32,6 +34,10 @@ class App extends Component {
           }}
           
         />
+        <button onClick={() => this.props.fetchTrips(this.props.api.nextParams)}>Search using current params</button>
+        </div>
+        <div className="line-filter">
+          <LineFilter handleClick={this.props.addLineToFilter}/>
         </div>
         <TripsContainer />
         <div className="map-container">
@@ -44,7 +50,8 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    trips: state.trips
+    trips: state.trips,
+    api: state.api
   };
 };
 
@@ -52,7 +59,9 @@ const mapDispatchToProps = (dispatch) => ({
   displayFavoriteTrips: () => dispatch(displayFavoriteTrips()),
   displayCurrentPageTrips: () => dispatch(displayCurrentPageTrips()),
   displayFavoriteLines: () => dispatch(displayFavoriteLines()),
-  displayAllLines: () => dispatch(displayAllLines())
+  displayAllLines: () => dispatch(displayAllLines()),
+  addLineToFilter: (line) => dispatch(addLineToFilter(line)),
+  fetchTrips: (params) => dispatch(fetchTrips(params))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -28,3 +28,11 @@ export const receiveTrips = (params, response) => {
   };
 };
 
+export const addLineToFilter = (line) => {
+  return {
+    type: 'ADD_LINE',
+    payload: {
+      line
+    }
+  };
+};

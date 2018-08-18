@@ -36,6 +36,18 @@ const api = (state = initialState, action) => {
       };
     }
 
+    case 'ADD_LINE': {
+      const { line } = action.payload;
+      if (state.nextParams.routes.includes(line)) return state;
+      return {
+        ...state,
+        nextParams: {
+          ...state.nextParams,
+          routes: [...state.nextParams.routes, line]
+        }
+      };
+    }
+
     default:
       return state;
   }
