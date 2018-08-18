@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { fetchTrips, fetchArrivals } from './utils/utils.js'; //rename to APIs
+import { fetchTrips, fetchArrivals, formatTrips } from './utils/utils.js'; //rename to APIs
 import Trip from './components/Trip.js';
 import GoogleMap from './components/GoogleMap.js';
 import FavoriteSwitches from './components/FavoriteSwitches.js';
@@ -11,9 +11,9 @@ class App extends Component {
     super();
     this.state = {
       api: { //state needed to format query to api
-        page: null,
-        sort: null,
-        filters: []
+        page: 1,
+        sort: 'origin-departure',
+        route: null,
       },
       arrivals: [],
       trips : {
@@ -54,13 +54,18 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    this.getTrips({page: 1}); //empty object meaning no specific trip params applied
+    const { page, sort, route } = this.state.api;
+    this.getTrips({
+      page,
+      sort,
+      route
+    }); //empty object meaning no specific trip params applied
   }
 
   async getTrips(tripParams) { // custom obj
     try {
-      const response = await fetchTrips(tripParams);
-      const uniqueLines = [...new Set(response.data.data.map(trip => trip.attributes.route))];
+      const fetchedTrips = await fetchTrips(tripParams);
+      const uniqueLines = [...new Set(fetchedTrips.map(trip => trip.attributes.route))];
       this.setState({
         api: {
           page: tripParams.page || null, // so the state object keeps its shape
@@ -69,8 +74,8 @@ class App extends Component {
         },
         trips: {
           ...this.state.trips,
-          currentPage: response.data.data,
-          visibleIds: response.data.data.map(trip => trip.id)
+          currentPage: fetchedTrips,
+          visibleIds: fetchedTrips.map(trip => trip.id)
         },
         lines: {
           ...this.state.lines,
