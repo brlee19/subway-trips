@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import MapContainer from './containers/MapContainer.js';
-import FavoriteSwitches from './components/FavoriteSwitches.js';
+import FavoriteSwitch from './components/FavoriteSwitch.js';
 import LineFilter from './components/LineFilter.js';
 
 import './App.css';
@@ -23,16 +23,11 @@ class App extends Component {
         </header>
 
         <div className="filter-controls">
-        <FavoriteSwitches
+        <FavoriteSwitch
           trips={{
             checked: this.props.trips.visibility.trips === 'favorites',
             onChange: this.props.trips.visibility.trips === 'favorites' ? this.props.displayCurrentPageTrips : this.props.displayFavoriteTrips
           }}
-          lines={{
-            checked: this.props.trips.visibility.lines === 'favorites',
-            onChange: this.props.trips.visibility.lines === 'favorites' ? this.props.displayAllLines : this.props.displayFavoriteLines
-          }}
-          
         />
         <button onClick={() => this.props.fetchTrips(this.props.api.nextParams)}>Search using current params</button>
         </div>

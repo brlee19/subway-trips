@@ -7,8 +7,6 @@ import { fetchTrips } from '../actions/apiActions.js';
 import { selectTrip, addTripToFavorites, removeTripFromFavorites,
          addLineToFavorites, removeLineFromFavorites } from '../actions/tripsActions.js';
 
-import '../App.css'; // move to app level?
-
 class TripsContainer extends Component {
   constructor(props) {
     super(props);
@@ -24,21 +22,20 @@ class TripsContainer extends Component {
     const visibleTrips = applyVisibilityFilters(trips, lines, visibility);
     return (
     <div className="trips-container">
-    {/* nav buttons component? */}
     {/* NEED DIFFERENT PAGINATION LOGIC IF SHOWING FAVE TRIPS, probably could just be two different components */}
     <NavButtons source={api.source} fetchPage={fetchPage}/>
-      {visibleTrips.map(trip => (
-        <Trip key={trip.id}
-              trip={trip}
-              selectTrip={(trip) => selectTrip(trips.selectedId, trip)}
-              isFavorite={{
-                trip: trips.favorites.map(faveTrip => faveTrip.id).includes(trip.id),
-                line: lines.favorites.includes(trip.attributes.route)
-              }}
-              toggleTripFromFavorites={toggleTripFromFavorites}
-              toggleLineFromFavorites={toggleLineFromFavorites}
-        />
-      ))}
+    {visibleTrips.map(trip => (
+      <Trip key={trip.id}
+            trip={trip}
+            selectTrip={(trip) => selectTrip(trips.selectedId, trip)}
+            isFavorite={{
+              trip: trips.favorites.map(faveTrip => faveTrip.id).includes(trip.id),
+              line: lines.favorites.includes(trip.attributes.route)
+            }}
+            toggleTripFromFavorites={toggleTripFromFavorites}
+            toggleLineFromFavorites={toggleLineFromFavorites}
+      />
+    ))}
     </div>
     )
   }
@@ -55,7 +52,7 @@ const applyTripFilters = (trips, visibility) => {
 };
 
 const applyLineFilters = (trips, lines, lineVisibility) => {
-  const visibleLines = lines[lineVisibility]; //
+  const visibleLines = lines[lineVisibility];
   return trips.filter(trip => visibleLines.includes(trip.attributes.route));
 }
 
