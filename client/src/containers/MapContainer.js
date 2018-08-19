@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import GoogleMapReact from 'google-map-react';
-import { googleAPIKey } from '../config.js';
 
 import ArrivalInfo from '../components/ArrivalInfo.js';
 import MapPin from '../components/MapPin.js';
-
 import { selectArrival, updateMap } from '../actions/mapActions.js';
+
+const googleAPIKey = process.env.GOOGLE_API_KEY || require('../config.js').googleAPIKey;
 
 class MapContainer extends Component {
   render() {
