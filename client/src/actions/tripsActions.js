@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { fetchTrips } from './apiActions';
   
 export const selectTrip = (trip) => {
   return async (dispatch) => {
@@ -63,7 +62,6 @@ export const addLineToFavorites = (line) => {
     }
   };
 };
-
 
 export const removeLineFromFavorites = (line) => {
   return {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import { displayCurrentPageTrips, displayFavoriteTrips } from '../actions/tripsActions';
@@ -7,16 +7,11 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
-class FavoriteSwitch extends Component {
-  constructor(props) {
-    super(props);
-  }
+const FavoriteSwitch = (props) => {
+  const tripVisibility = props.trips.visibility.trips;
+  const { displayCurrentPageTrips, displayFavoriteTrips } = props;
 
-  render(){
-    const tripVisibility = this.props.trips.visibility.trips;
-    const { displayCurrentPageTrips, displayFavoriteTrips } = this.props;
-
-    return (
+  return (
     <FormGroup row className="filter-buttons">
       <FormControlLabel
         control={
@@ -28,8 +23,7 @@ class FavoriteSwitch extends Component {
         label="Show your favorite trips"
       />
     </FormGroup>
-    )
-  }
+  );
 }
 
 const mapStateToProps = (state) => {

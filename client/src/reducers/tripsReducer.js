@@ -7,11 +7,6 @@ const initialState = {
     selectedId: '' // tripId
   },
   arrivals: [], // arrival objects
-  lines: {
-    all: ['1', '2', '3', '4', '5', '6', '7', 'A', 'C', 'E', 'B', 'D', 'F', 'M',
-          'G', 'J', 'Z', 'L', 'N', 'Q', 'R', 'W', 'S'],
-    favorites: []
-  },
   visibility: {
     trips: 'currentPage', // 'currentPage' or 'favorites'
     lines: 'all' // 'all' or 'favorites' or 'filter'
@@ -38,7 +33,6 @@ const trips = (state = initialState, action) => {
     }
 
     case 'RECEIVE_ARRIVALS': {
-      // alert('receiving arrivals')
       const arrivals = formatArrivals(action.payload.response.data.data);
       return {
         ...state,
@@ -92,48 +86,6 @@ const trips = (state = initialState, action) => {
       };
     }
 
-    case 'ADD_FAVORITE_LINE': {
-      const { line } = action.payload;
-      return {
-        ...state,
-        lines: {
-          ...state.lines,
-          favorites: [...state.lines.favorites, line]
-        }
-      };
-    }
-
-    case 'REMOVE_FAVORITE_LINE': {
-      const { line } = action.payload;
-      return {
-        ...state,
-        lines: {
-          ...state.lines,
-          favorites: state.lines.favorites.filter(faveLine => faveLine !== line)
-        }
-      };
-    }
-
-    case 'DISPLAY_FAVORITE_LINES': {
-      return {
-        ...state,
-        visibility: {
-          ...state.visibility,
-          lines: 'favorites'
-        }
-      };
-    }
-
-    case 'DISPLAY_ALL_LINES': {
-      return {
-        ...state,
-        visibility: {
-          ...state.visibility,
-          lines: 'all'
-        }
-      };
-    }
-
     default:
       return state;
   }
@@ -155,7 +107,7 @@ const formatTrips = (trips) => {
         // convert any '6X' trains to '6'
         'route': trip.attributes.route === '6X' ? '6' : trip.attributes.route
       }
-    }
+    };
   });
 };
 

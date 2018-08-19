@@ -6,7 +6,9 @@ const Trip = (props) => {
   const { trip, isFavorite } = props
   return (
     <Paper elevation={5}>
+
       <div className="trip-wrapper" key={trip.id}>
+
         <div className="line-picture"> 
           <img
             src={`/subwayicons/${trip.attributes.route}.png`}
@@ -16,8 +18,13 @@ const Trip = (props) => {
         </div>
 
         <div className="trip-details">
-            <p className="trip-detail-line"><strong>Departure From Origin:</strong> {trip.attributes['origin-departure']}</p>
-            <p className="trip-detail-line"><strong>Destination:</strong>  {trip.attributes.destination}</p>
+            <p className="trip-detail-line">
+              <strong>Departure From Origin:</strong> {trip.attributes['origin-departure']}
+            </p>
+            <p className="trip-detail-line">
+              <strong>Destination:</strong> {trip.attributes.destination}
+            </p>
+            
             <Button
               variant="raised"
               color="primary"

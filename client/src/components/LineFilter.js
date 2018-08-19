@@ -11,15 +11,16 @@ const LineFilter = (props) => {
   return (
   <div>
     <div className="line-filter">
-      {lines.map(line => <div key={line}>
+      {lines.map(line => (
+        <div key={line}>
           <img className="subway-icon"
-              src={`/subwayicons/${line}.png`}
-              onClick={() => {
-                nextParamsRoutes.includes(line) ? removeLineFromFilter(line) : addLineToFilter(line)
-                }}
-              style={{opacity: nextParamsRoutes.includes(line) ? 1 : 0.4}}
+            src={`/subwayicons/${line}.png`}
+            onClick={() => {
+              nextParamsRoutes.includes(line) ? removeLineFromFilter(line) : addLineToFilter(line)
+              }}
+            style={{opacity: nextParamsRoutes.includes(line) ? 1 : 0.4}}
           />
-          </div>)}
+        </div>))}
     </div>
     
     <div className="line-filter-controls">
@@ -48,7 +49,7 @@ const LineFilter = (props) => {
     </div>
   </div>
   )
-}
+};
 
 const mapStateToProps = (state) => {
   return {
