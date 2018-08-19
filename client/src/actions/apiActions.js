@@ -3,7 +3,7 @@ import axios from 'axios';
 export const fetchTrips = (params) => {
   const { page, sort, routes } = params;
   return async (dispatch) => {
-    // dispatch(requestTrips(apiState)); // not necessary no spinner needed?
+    dispatch(requestTrips()); // not necessary no spinner needed?
     try {
       const response = await axios.get('https://nooklyn-interview.herokuapp.com/trips', {params: {
         'page[number]': page,
@@ -14,9 +14,17 @@ export const fetchTrips = (params) => {
       dispatch(receiveTrips(params, response));
     } catch(e) {
       console.log('error fetching trips', e);
-      //dispatch error state if using spinner, etc
+      dispatch(tripError());
     }
   }
+};
+
+export const requestTrips = () => {
+  return { type: 'REQUEST_TRIPS'};
+};
+
+export const tripError = () => {
+  return { type: 'TRIP_ERROR' };
 };
 
 export const receiveTrips = (params, response) => {

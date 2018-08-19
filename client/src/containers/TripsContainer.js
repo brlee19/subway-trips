@@ -8,10 +8,6 @@ import { selectTrip, addTripToFavorites, removeTripFromFavorites,
          addLineToFavorites, removeLineFromFavorites } from '../actions/tripsActions.js';
 
 class TripsContainer extends Component {
-  componentDidMount() {
-    this.props.fetchTrips({page: 1, routes: [], sort: 'origin-departure'});
-  }
-
   render() {
     const { trips, visibility, api, fetchPage, selectTrip,
             toggleTripFromFavorites } = this.props;

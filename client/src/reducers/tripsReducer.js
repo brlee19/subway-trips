@@ -1,6 +1,10 @@
 import { formatArrivals, formatTrips} from '../constants.js';
 
 const initialState = {
+  status: {
+    isLoading: false,
+    error: false
+  },
   trips: {
     currentPage: [], // trip objects
     favorites: [], // trip objects
@@ -19,6 +23,10 @@ const trips = (state = initialState, action) => {
       const fetchedTrips = formatTrips(action.payload.response.data.data);
       return {
         ...state,
+        status: {
+          isLoading: false,
+          error: false,
+        },
         trips: {
           ...state.trips,
           currentPage: fetchedTrips,
@@ -28,6 +36,16 @@ const trips = (state = initialState, action) => {
         visibility: {
           ...state.visibility,
           trips: 'currentPage'
+        }
+      };
+    }
+
+    case 'REQUEST_TRIPS': {
+      return {
+        ...state,
+        status: {
+          isLoading: true,
+          error: false
         }
       };
     }
