@@ -3,8 +3,8 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 
 const NavButtons = ({ source, fetchPage, visibility }) => {
-  if (visibility.trips === 'favorites') return null
-  if (visibility.trips === 'currentPage') return (
+  if (visibility.trips === 'favorites') return null;
+  else if (visibility.trips === 'currentPage') return (
   <Paper>
     <Button 
       variant="raised"
@@ -37,7 +37,8 @@ const NavButtons = ({ source, fetchPage, visibility }) => {
     <div>
       Page {source.pages.current} of {source.pages.last}
     </div>
-  </Paper>
-)};
+  </Paper>);
+  else return <div> Something went wrong! </div>
+};
 
 export default NavButtons;

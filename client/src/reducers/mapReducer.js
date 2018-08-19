@@ -23,6 +23,16 @@ const googleMap = (state = initialState, action) => {
         }
       };
     }
+
+    case 'RECENTER_MAP': {
+      const { center, zoom } = action.payload;
+      return {
+        ...state,
+        center: center,
+        zoom: zoom
+      };
+    }
+
     default:
       return state;
   }

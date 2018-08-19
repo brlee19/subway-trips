@@ -6,3 +6,13 @@ export const selectArrival = (arrival) => {
     }
   };
 };
+
+export const updateMap = (center, zoom) => {
+  return {
+    type: 'RECENTER_MAP',
+    payload: {
+      center,
+      zoom
+    }
+  };
+}
