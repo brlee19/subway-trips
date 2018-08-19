@@ -151,7 +151,9 @@ const formatTrips = (trips) => {
       ...trip,
       attributes: {
         ...trip.attributes,
-        'origin-departure': formatTime(trip.attributes['origin-departure'])
+        'origin-departure': formatTime(trip.attributes['origin-departure']),
+        // convert any '6X' trains to '6'
+        'route': trip.attributes.route === '6X' ? '6' : trip.attributes.route
       }
     }
   });

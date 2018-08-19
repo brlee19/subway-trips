@@ -7,7 +7,8 @@ export const fetchTrips = (params) => {
     try {
       const response = await axios.get('https://nooklyn-interview.herokuapp.com/trips', {params: {
         'page[number]': page,
-        'filter[route]': routes,
+        // add 6X to route params if searching 6 train
+        'filter[route]': routes.includes('6') ? [...routes, '6X'] : routes,
         sort
       }});
       dispatch(receiveTrips(params, response));
