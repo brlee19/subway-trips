@@ -14,7 +14,7 @@ const LineFilter = (props) => {
       {lines.map(line => (
         <div key={line}>
           <img className="subway-icon"
-            src={`/subwayicons/${line}.png`}
+            src={require(`../images/subway-icons/${line}.png`)}
             onClick={() => {
               nextParamsRoutes.includes(line) ? removeLineFromFilter(line) : addLineToFilter(line)
               }}

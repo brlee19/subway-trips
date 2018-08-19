@@ -11,7 +11,7 @@ const Trip = (props) => {
 
         <div className="line-picture"> 
           <img
-            src={`/subwayicons/${trip.attributes.route}.png`}
+            src={require(`../images/subway-icons/${trip.attributes.route}.png`)}
             alt={trip.attributes.route}
             height="64" width="64"
           />
