@@ -6,7 +6,7 @@ import { lines } from '../constants.js';
 const LineFilter = (props) => {
   const nextParamsRoutes = props.api.nextParams.routes;
   const { addLineToFilter, removeLineFromFilter, addAllLinesToFilter, removeAllLinesFromFilter } = props;
-  return ( <div class="line-filter">
+  return ( <div className="line-filter">
     {lines.map(line => <div key={line}>
         <img className="subway-icon"
             src={`/subwayicons/${line}.png`}

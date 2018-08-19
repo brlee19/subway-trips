@@ -4,13 +4,17 @@ import { connect } from 'react-redux';
 import GoogleMapReact from 'google-map-react';
 import { googleAPIKey } from '../config.js';
 
+import ArrivalInfo from '../components/ArrivalInfo.js';
 import MapPin from '../components/MapPin.js';
+
+import { selectArrival } from '../actions/mapActions.js';
 
 class MapContainer extends Component {
   render() {
     const { arrivals, googleMap } = this.props;
     return (
       <div style={{ height: '100vh', width: '100%' }}>
+        <ArrivalInfo arrival={ googleMap.arrivals.selectedArrival }/>
         <GoogleMapReact
           bootstrapURLKeys={{ key: googleAPIKey }}
           center={googleMap.center}
@@ -21,7 +25,7 @@ class MapContainer extends Component {
                   lng={arrival.attributes.longitude}
                   arrival={arrival}
                   key={arrival.id}
-                  handleClick={this.selectArrival}
+                  handleClick={this.props.selectArrival}
           />
         ))}
         </GoogleMapReact>
@@ -38,7 +42,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-
+  selectArrival: (arrival) => dispatch(selectArrival(arrival))
 });
 
-export default connect(mapStateToProps)(MapContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(MapContainer);

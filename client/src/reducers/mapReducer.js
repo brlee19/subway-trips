@@ -13,6 +13,16 @@ const initialState = {
 
 const googleMap = (state = initialState, action) => {
   switch (action.type) {
+    case 'SELECT_ARRIVAL': {
+      const { arrival } = action.payload;
+      return {
+        ...state,
+        arrivals: {
+          ...state.arrivals,
+          selectedArrival: arrival
+        }
+      };
+    }
     default:
       return state;
   }

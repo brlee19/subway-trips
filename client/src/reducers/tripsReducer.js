@@ -18,9 +18,6 @@ const initialState = {
   }
 };
 
-// compute ids to display based on state, don't store in state itself
-
-
 const trips = (state = initialState, action) => {
   switch (action.type) {
     case 'RECEIVE_TRIPS': {
@@ -42,7 +39,7 @@ const trips = (state = initialState, action) => {
 
     case 'RECEIVE_ARRIVALS': {
       // alert('receiving arrivals')
-      const arrivals = action.payload.response.data.data;
+      const arrivals = formatArrivals(action.payload.response.data.data);
       return {
         ...state,
         trips: {
@@ -158,4 +155,16 @@ const formatTrips = (trips) => {
       }
     }
   });
-}
+};
+
+const formatArrivals = (arrivals) => {
+  return arrivals.map(arrival => {
+    return {
+      ...arrival,
+      attributes: {
+        ...arrival.attributes,
+        'time': formatTime(arrival.attributes.time)
+      }
+    }
+  });
+};
