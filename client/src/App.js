@@ -31,8 +31,10 @@ class App extends Component {
         <div className="line-filter">
           <LineFilter />
         </div>
-        
-        <TripsContainer />
+
+        <div className="trips-container">
+          <TripsContainer />
+        </div>
         
         <div className="map-container">
           <MapContainer />

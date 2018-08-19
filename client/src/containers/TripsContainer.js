@@ -21,9 +21,9 @@ class TripsContainer extends Component {
             toggleTripFromFavorites, toggleLineFromFavorites } = this.props;
     const visibleTrips = applyVisibilityFilters(trips, lines, visibility);
     return (
-    <div className="trips-container">
+    <div>
     {/* NEED DIFFERENT PAGINATION LOGIC IF SHOWING FAVE TRIPS, probably could just be two different components */}
-    <NavButtons source={api.source} fetchPage={fetchPage}/>
+    <NavButtons source={api.source} fetchPage={fetchPage} visibility={visibility}/>
     {visibleTrips.map(trip => (
       <Trip key={trip.id}
             trip={trip}
