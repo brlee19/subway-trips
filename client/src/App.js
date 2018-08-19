@@ -25,7 +25,6 @@ class App extends Component {
 
         <div className="filter-controls">
           <FavoriteSwitch />
-          <button onClick={() => this.props.fetchTrips(this.props.api.nextParams)}>Search using current params</button>
         </div>
         
         <div className="line-filter">

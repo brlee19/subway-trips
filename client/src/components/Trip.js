@@ -9,7 +9,7 @@ const Trip = (props) => {
       <div className="trip-wrapper" key={trip.id}>
         <div className="line-picture"> 
           <img
-            src={trip.attributes['route-image-url']}
+            src={`/subwayicons/${trip.attributes.route}.png`}
             alt={trip.attributes.route}
             height="64" width="64"
           />
@@ -28,14 +28,6 @@ const Trip = (props) => {
         </div>
 
         <div className="favorite-buttons">
-          <Button
-            onClick={() => {props.toggleLineFromFavorites(isFavorite.line, trip.attributes.route)}}
-            variant="raised"
-            color="primary"
-            size="small"
-          >
-          { isFavorite.line ? '💛 Line': '♡ Line' }
-          </Button>
           <Button
               onClick={() => {props.toggleTripFromFavorites(isFavorite.trip, trip)}}
               variant="raised"

@@ -8,18 +8,14 @@ import { selectTrip, addTripToFavorites, removeTripFromFavorites,
          addLineToFavorites, removeLineFromFavorites } from '../actions/tripsActions.js';
 
 class TripsContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.props.fetchTrips({page: 1, routes: [], sort: 'origin-departure'});
   }
 
   render() {
-    const { trips, lines, visibility, api, fetchPage, selectTrip,
-            toggleTripFromFavorites, toggleLineFromFavorites } = this.props;
-    const visibleTrips = applyVisibilityFilters(trips, lines, visibility);
+    const { trips, visibility, api, fetchPage, selectTrip,
+            toggleTripFromFavorites } = this.props;
+    const visibleTrips = applyVisibilityFilter(trips, visibility);
     return (
     <div>
     {/* NEED DIFFERENT PAGINATION LOGIC IF SHOWING FAVE TRIPS, probably could just be two different components */}
@@ -29,11 +25,9 @@ class TripsContainer extends Component {
             trip={trip}
             selectTrip={(trip) => selectTrip(trips.selectedId, trip)}
             isFavorite={{
-              trip: trips.favorites.map(faveTrip => faveTrip.id).includes(trip.id),
-              line: lines.favorites.includes(trip.attributes.route)
+              trip: trips.favorites.map(faveTrip => faveTrip.id).includes(trip.id)
             }}
             toggleTripFromFavorites={toggleTripFromFavorites}
-            toggleLineFromFavorites={toggleLineFromFavorites}
       />
     ))}
     </div>
@@ -42,19 +36,9 @@ class TripsContainer extends Component {
 }
 
 // render logic
-const applyVisibilityFilters = (trips, lines, visibility) => {
-  const visibleTrips = applyTripFilters(trips, visibility.trips);
-  return applyLineFilters(visibleTrips, lines, visibility.lines);
+const applyVisibilityFilter = (trips, visibility) => {
+  return trips[visibility.trips];
 };
-
-const applyTripFilters = (trips, visibility) => {
-  return trips[visibility]; // visibility is either 'currentPage' or 'favorites
-};
-
-const applyLineFilters = (trips, lines, lineVisibility) => {
-  const visibleLines = lines[lineVisibility];
-  return trips.filter(trip => visibleLines.includes(trip.attributes.route));
-}
 
 const mapStateToProps = (state) => {
   return {
