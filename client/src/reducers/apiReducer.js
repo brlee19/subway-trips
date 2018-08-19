@@ -1,3 +1,5 @@
+import { lines } from '../constants.js';
+
 const initialState = {
   source: { // the current source of data in the app
     pages: {
@@ -44,6 +46,38 @@ const api = (state = initialState, action) => {
         nextParams: {
           ...state.nextParams,
           routes: [...state.nextParams.routes, line]
+        }
+      };
+    }
+
+    case 'REMOVE_LINE': {
+      const { line } = action.payload;
+      if (!state.nextParams.routes.includes(line)) return state;
+      return {
+        ...state,
+        nextParams: {
+          ...state.nextParams,
+          routes: state.nextParams.routes.filter(route => route !== line)
+        }
+      };
+    }
+
+    case 'ADD_ALL_LINES': {
+      return {
+        ...state,
+        nextParams: {
+          ...state.nextParams,
+          routes: lines.slice()
+        }
+      };
+    }
+
+    case 'REMOVE_ALL_LINES': {
+      return {
+        ...state,
+        nextParams: {
+          ...state.nextParams,
+          routes: []
         }
       };
     }

@@ -8,7 +8,7 @@ import LineFilter from './components/LineFilter.js';
 import './App.css';
 import TripsContainer from './containers/TripsContainer';
 import { displayFavoriteTrips, displayCurrentPageTrips, displayFavoriteLines, displayAllLines } from './actions/tripsActions';
-import { addLineToFilter, fetchTrips } from './actions/apiActions.js';
+import { addLineToFilter, removeLineFromFilter, fetchTrips } from './actions/apiActions.js';
 
 class App extends Component {
   constructor() {
@@ -37,7 +37,7 @@ class App extends Component {
         <button onClick={() => this.props.fetchTrips(this.props.api.nextParams)}>Search using current params</button>
         </div>
         <div className="line-filter">
-          <LineFilter handleClick={this.props.addLineToFilter}/>
+          <LineFilter />
         </div>
         <TripsContainer />
         <div className="map-container">
@@ -61,6 +61,7 @@ const mapDispatchToProps = (dispatch) => ({
   displayFavoriteLines: () => dispatch(displayFavoriteLines()),
   displayAllLines: () => dispatch(displayAllLines()),
   addLineToFilter: (line) => dispatch(addLineToFilter(line)),
+  removeLineFromFilter: (line) => dispatch(removeLineFromFilter(line)),
   fetchTrips: (params) => dispatch(fetchTrips(params))
 });
 

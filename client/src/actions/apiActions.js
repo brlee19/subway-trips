@@ -36,3 +36,21 @@ export const addLineToFilter = (line) => {
     }
   };
 };
+
+export const removeLineFromFilter = (line) => {
+  return {
+    type: 'REMOVE_LINE',
+    payload: {
+      line
+    }
+  };
+};
+
+export const addAllLinesToFilter = () => {
+  return { type: 'ADD_ALL_LINES' };
+};
+
+export const removeAllLinesFromFilter = () => {
+  return { type: 'REMOVE_ALL_LINES' };
+};
+
