@@ -16,6 +16,7 @@ class App extends Component {
   }
 
   render() {
+
     return (
       <div className="App">
         <header className="App-header">
@@ -23,21 +24,20 @@ class App extends Component {
         </header>
 
         <div className="filter-controls">
-        <FavoriteSwitch
-          trips={{
-            checked: this.props.trips.visibility.trips === 'favorites',
-            onChange: this.props.trips.visibility.trips === 'favorites' ? this.props.displayCurrentPageTrips : this.props.displayFavoriteTrips
-          }}
-        />
-        <button onClick={() => this.props.fetchTrips(this.props.api.nextParams)}>Search using current params</button>
+          <FavoriteSwitch />
+          <button onClick={() => this.props.fetchTrips(this.props.api.nextParams)}>Search using current params</button>
         </div>
+        
         <div className="line-filter">
           <LineFilter />
         </div>
+        
         <TripsContainer />
+        
         <div className="map-container">
           <MapContainer />
         </div>
+      
       </div>
     );
   }
