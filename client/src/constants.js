@@ -1,4 +1,5 @@
-// constant values used in multiple files
+// constant values and functions used in multiple files
+import moment from 'moment';
 
 /*
  NOTES:
@@ -9,3 +10,35 @@
 
 export const lines = ['1', '2', '3', '4', '5', '6', '7', 'A', 'C', 'E', 'B', 'D', 'F', 'M',
 'G', 'J', 'Z', 'L', 'N', 'Q', 'R', 'W', 'GS'];
+
+// helper functions used in multiple files
+
+const formatTime = (timeStamp) => {
+  return moment(timeStamp).format('MMM DD h:mm A');
+};
+
+export const formatTrips = (trips) => {
+  return trips.map(trip => {
+    return {
+      ...trip,
+      attributes: {
+        ...trip.attributes,
+        'origin-departure': formatTime(trip.attributes['origin-departure']),
+        // convert any '6X' trains to '6'
+        'route': trip.attributes.route === '6X' ? '6' : trip.attributes.route
+      }
+    };
+  });
+};
+
+export const formatArrivals = (arrivals) => {
+  return arrivals.map(arrival => {
+    return {
+      ...arrival,
+      attributes: {
+        ...arrival.attributes,
+        'time': formatTime(arrival.attributes.time)
+      }
+    }
+  });
+};

@@ -1,3 +1,5 @@
+import { formatArrivals } from '../constants.js';
+
 const initialState = {
   center: { // remove if unable to make map center dynamic
     lat: 40.7128,
@@ -13,6 +15,15 @@ const initialState = {
 
 const googleMap = (state = initialState, action) => {
   switch (action.type) {
+    case 'RECEIVE_ARRIVALS': {
+      const arrivals = formatArrivals(action.payload.response.data.data);
+      const newCenter = calculateCentralCoordinates(arrivals);
+      return {
+        ...state,
+        center: newCenter,
+      };
+    }
+    
     case 'SELECT_ARRIVAL': {
       const { arrival } = action.payload;
       return {
@@ -28,8 +39,8 @@ const googleMap = (state = initialState, action) => {
       const { center, zoom } = action.payload;
       return {
         ...state,
-        center: center,
-        zoom: zoom
+        center,
+        zoom
       };
     }
 
@@ -39,3 +50,24 @@ const googleMap = (state = initialState, action) => {
 };
 
 export default googleMap;
+
+// move to a constants file b/c used by multiple reducers!
+
+const calculateCentralCoordinates = (arrivals) => {
+  const arrivalsWithCoordinates = arrivals.filter((arrival) => {
+     return arrival.attributes.latitude && arrival.attributes.longitude;
+   })  
+ 
+   const sumCoords = arrivalsWithCoordinates.reduce((coords, arrival) => {
+     const { latitude, longitude } = arrival.attributes;
+     return [
+       coords[0] + parseFloat(latitude), 
+       coords[1] + parseFloat(longitude)
+     ]
+   }, [0, 0]);
+ 
+   return {
+    lat: sumCoords[0] / arrivalsWithCoordinates.length,
+    lng: sumCoords[1] / arrivalsWithCoordinates.length
+  };
+};

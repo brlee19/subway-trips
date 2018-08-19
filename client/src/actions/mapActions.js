@@ -15,4 +15,4 @@ export const updateMap = (center, zoom) => {
       zoom
     }
   };
-}
+};

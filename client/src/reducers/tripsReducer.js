@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { formatArrivals, formatTrips} from '../constants.js';
 
 const initialState = {
   trips: {
@@ -92,33 +92,3 @@ const trips = (state = initialState, action) => {
 };
 
 export default trips;
-
-const formatTime = (timeStamp) => {
-  return moment(timeStamp).format('MMM DD h:mm A');
-};
-
-const formatTrips = (trips) => {
-  return trips.map(trip => {
-    return {
-      ...trip,
-      attributes: {
-        ...trip.attributes,
-        'origin-departure': formatTime(trip.attributes['origin-departure']),
-        // convert any '6X' trains to '6'
-        'route': trip.attributes.route === '6X' ? '6' : trip.attributes.route
-      }
-    };
-  });
-};
-
-const formatArrivals = (arrivals) => {
-  return arrivals.map(arrival => {
-    return {
-      ...arrival,
-      attributes: {
-        ...arrival.attributes,
-        'time': formatTime(arrival.attributes.time)
-      }
-    }
-  });
-};

@@ -9,35 +9,6 @@ import MapPin from '../components/MapPin.js';
 import { selectArrival, updateMap } from '../actions/mapActions.js';
 
 class MapContainer extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     center: {
-  //       lat: 40.85757283543077,
-  //       lng: -74.03921173114793
-  //     },
-  //     zoom: 11
-  //   }
-  //   this._onChange = this._onChange.bind(this);
-  //   this.changeCenter = this.changeCenter.bind(this);
-  // }
-
-  // _onChange({center, zoom}) {
-  //   this.setState({
-  //     center: center,
-  //     zoom: zoom,      
-  //   });
-  // }
-
-  // changeCenter(lat, lng) {
-  //   this.setState({
-  //     center: {
-  //       lat,
-  //       lng
-  //     }
-  //   });
-  // }
-
   render() {
     const { arrivals, googleMap, updateMap } = this.props;
     console.log('map has re-rendered')
@@ -60,13 +31,10 @@ class MapContainer extends Component {
           />
         ))}
         </GoogleMapReact>
-        <button onClick={
-          () => updateMap({lat: 37.7824134, lng: -122.4088472}, 11)
-        }>RECENTER MAP</button>
       </div>
     );
   }
-}
+};
 
 const mapStateToProps = (state) => {
   return {
