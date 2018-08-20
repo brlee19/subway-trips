@@ -82,7 +82,6 @@ export const deleteFavoriteTrip = (userId, trip) => {
           tripId: trip.id
         }
       });
-      console.log('response from server after deleting is', response.data)
       if (response.data === 'Favorite trip successfully deleted!') {
         dispatch(removeTripFromFavorites(trip));
       }

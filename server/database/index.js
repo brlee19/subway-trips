@@ -1,4 +1,5 @@
 const { Client } = require('pg');
+const moment = require('moment');
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL || require('../config.js').databaseUrl,
@@ -6,6 +7,10 @@ const client = new Client({
 });
 
 client.connect();
+
+const createTimestamp = (formattedTime) => {
+  return moment(formattedTime, 'MMM DD h:mm A').toISOString();
+};
 
 exports.getFavoriteTrips = async (userId) => {
   const queryStr = `
@@ -56,7 +61,7 @@ const saveTrip = async (trip) => {
       select trip_id from trips where trips.trip_id = ($1)
     )`;
 
-  const values = [trip.id, trip.links.self, trip.attributes.route, trip.attributes['origin-departure'],
+  const values = [trip.id, trip.links.self, trip.attributes.route, createTimestamp(trip.attributes['origin-departure']),
     trip.attributes.destination, trip.attributes['route-image-url'], trip.relationships.arrivals.links.self,
     trip.relationships.arrivals.links.related];
 

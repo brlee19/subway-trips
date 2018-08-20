@@ -13,6 +13,7 @@ app.get('/api/users/:userId/favorite-trips', async (req, res) => {
     const { userId } = req.params;
     res.send(await getFavoriteTrips(userId));
   } catch(e) {
+    console.log('error getting favorite trips', e);
     res.status(500).send('Unable to get favorite trips!');
   };
 });
@@ -23,6 +24,7 @@ app.post('/api/favorite-trips', async (req, res) => {
     await saveFavoriteTrip(userId, trip);
     res.send('Favorite trip successfully saved!');
   } catch(e) {
+    console.log('error saving favorite trip', e);
     res.status(500).send('Unable to save favorite trip!');
   };
 });
@@ -30,9 +32,7 @@ app.post('/api/favorite-trips', async (req, res) => {
 app.delete('/api/favorite-trips', async (req, res) => {
   try {
     const { userId, tripId } = req.body;
-    console.log('userId and tripId are', userId, tripId)
-    const result = await deleteFavoriteTrip(userId, tripId);
-    console.log(result);
+    await deleteFavoriteTrip(userId, tripId);
     res.send('Favorite trip successfully deleted!');
   } catch(e) {
     console.log('error deleting fave trip', e);
