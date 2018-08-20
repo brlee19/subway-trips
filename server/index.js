@@ -4,7 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 8080;
 const { getFavoriteTrips, saveFavoriteTrip, deleteFavoriteTrip,
-        getFavoriteLines, updateFavoriteLines, addFavoriteLines } = require('./database/index.js');
+        getFavoriteLines, updateFavoriteLines } = require('./database/index.js');
 
 app.use(express.static(__dirname + '/../client/build'));
 app.use(bodyParser.json())
@@ -51,16 +51,14 @@ app.get('/api/users/:userId/favorite-lines', async (req, res) => {
   };
 });
 
-app.get('/api/favorite-lines-test', async (req, res) => {
+app.post('/api/favorite-lines-test', async (req, res) => {
   try {
-    // const { userId, lines } = req.body;
-    await updateFavoriteLines(1, ['B','D','F','M']);
-    // console.log('userId and lines are', userId, lines)
-    // await saveFavoriteTrip(userId, trip);
-    res.send('Favorite lines successfully updated!');
+    const { userId, lines } = req.body;
+    await updateFavoriteLines(userId, lines);
+    res.send('Favorite lines successfully saved or updated!');
   } catch(e) {
     console.log('error saving favorite lines', e);
-    res.status(500).send('Unable to save favorite lines!');
+    res.status(500).send('Unable to save or update favorite lines!');
   };
 });
 

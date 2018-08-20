@@ -99,7 +99,7 @@ const getFavoriteLines = async (userId) => {
   return favoriteLines.rows;
 };
 
-const addFavoriteLine = async (userId, line) => {
+const addFavoriteLine = (userId, line) => {
   const queryStr = `
     insert into favorite_lines(user_id, line_name)
     values ($1, $2)
