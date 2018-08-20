@@ -25,3 +25,4 @@ yarn-error.log*
 #
 .vscode
 client/src/config.js
+server/config.js
