@@ -3,7 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 
 const Trip = (props) => {
-  const { trip, isFavorite } = props
+  const { trip, isFavorite, userId } = props;
   return (
     <Paper elevation={5}>
 
@@ -36,7 +36,9 @@ const Trip = (props) => {
 
         <div className="favorite-buttons">
           <Button
-              onClick={() => {props.toggleTripFromFavorites(isFavorite.trip, trip)}}
+              onClick={() => {
+                props.toggleTripFromFavorites(userId, trip)}
+              }
               variant="raised"
               color="primary"
               size="small"

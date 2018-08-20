@@ -40,6 +40,17 @@ const trips = (state = initialState, action) => {
       };
     }
 
+    case 'RECEIVE_FAVORITE_TRIPS': {
+      const fetchedFavoriteTrips = formatTrips(action.payload.response.data);
+      return {
+        ...state,
+        trips: {
+          ...state.trips,
+          favorites: [...fetchedFavoriteTrips]
+        },
+      };
+    }
+
     case 'REQUEST_TRIPS': {
       return {
         ...state,

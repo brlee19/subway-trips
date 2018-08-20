@@ -3,27 +3,26 @@ import { connect } from 'react-redux';
 
 import Trip from '../components/Trip.js';
 import NavButtons from '../components/NavButtons.js';
-import { fetchTrips } from '../actions/apiActions.js';
-import { selectTrip, addTripToFavorites, removeTripFromFavorites,
-         addLineToFavorites, removeLineFromFavorites } from '../actions/tripsActions.js';
+import { fetchTrips, postFavoriteTrip, removeTripFromFavorites} from '../actions/apiActions.js';
+import { selectTrip, addLineToFavorites, removeLineFromFavorites } from '../actions/tripsActions.js';
 
 class TripsContainer extends Component {
   render() {
     const { trips, visibility, api, fetchPage, selectTrip,
-            toggleTripFromFavorites } = this.props;
+            postFavoriteTrip } = this.props;
     const visibleTrips = applyVisibilityFilter(trips, visibility);
     return (
     <div>
-    {/* NEED DIFFERENT PAGINATION LOGIC IF SHOWING FAVE TRIPS, probably could just be two different components */}
     <NavButtons source={api.source} fetchPage={fetchPage} visibility={visibility}/>
     {visibleTrips.map(trip => (
       <Trip key={trip.id}
             trip={trip}
+            userId={api.userId}
             selectTrip={(trip) => selectTrip(trips.selectedId, trip)}
             isFavorite={{
               trip: trips.favorites.map(faveTrip => faveTrip.id).includes(trip.id)
             }}
-            toggleTripFromFavorites={toggleTripFromFavorites}
+            toggleTripFromFavorites={postFavoriteTrip}
       />
     ))}
     </div>
@@ -56,9 +55,10 @@ const mapDispatchToProps = (dispatch) => ({
   selectTrip: (currentSelectedId, trip) => {
     if (currentSelectedId !== trip.id) dispatch(selectTrip(trip));
   },
-  toggleTripFromFavorites: (isFavorite, trip) => {
-    isFavorite ? dispatch(removeTripFromFavorites(trip)) : dispatch(addTripToFavorites(trip))
-  },
+  postFavoriteTrip: (userId, trip) => dispatch(postFavoriteTrip(userId, trip)),
+  // toggleTripFromFavorites: (isFavorite, trip) => {
+  //   isFavorite ? dispatch(removeTripFromFavorites(trip)) : dispatch(postFavoriteTrip(userId, trip))
+  // },
   toggleLineFromFavorites: (isFavorite, line) => {
     isFavorite ? dispatch(removeLineFromFavorites(line)) : dispatch(addLineToFavorites(line))
   }

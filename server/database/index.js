@@ -16,14 +16,9 @@ exports.getFavoriteTrips = async (userId) => {
     join trips t on favorite_trips.trip_id = t.trip_id
     where users.user_id = ${userId}`;
   
-  try {
-    const favoriteTrips = await client.query(queryStr);
-    if (favoriteTrips.rows.length) return formatTrips(favoriteTrips.rows);
-    else return []; 
-  } catch(e) {
-    console.log('error getting favorite trips', e);
-    return null;
-  };
+  const favoriteTrips = await client.query(queryStr);
+  if (favoriteTrips.rows.length) return formatTrips(favoriteTrips.rows);
+  else return []; 
 };
 
 const formatTrips = (tripQueryResults) => {
@@ -65,13 +60,7 @@ const saveTrip = async (trip) => {
     trip.attributes.destination, trip.attributes['route-image-url'], trip.relationships.arrivals.links.self,
     trip.relationships.arrivals.links.related];
 
-  try {
-    await client.query(queryStr, values);
-    return;
-  } catch(e) {
-    console.log('error getting favorite trips', e);
-    return null;
-  };
+  return await client.query(queryStr, values);
 };
 
 exports.saveFavoriteTrip = async (userId, trip) => {
@@ -84,12 +73,6 @@ exports.saveFavoriteTrip = async (userId, trip) => {
     )
   `;
 
-  try {
-    await saveTrip(trip);
-    await client.query(queryStr, [trip.id, userId]);
-    return;
-  } catch(e) {
-    console.log('error saving favorite trips', e);
-    return null;
-  };
+  await saveTrip(trip);
+  return await client.query(queryStr, [trip.id, userId]);
 };

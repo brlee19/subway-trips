@@ -14,7 +14,8 @@ const initialState = {
     page: 1,
     sort: 'origin-departure',
     routes: []
-  }
+  },
+  userId: 1 //only one user for now
 };
 
 const api = (state = initialState, action) => {

@@ -37,6 +37,63 @@ export const receiveTrips = (params, response) => {
   };
 };
 
+export const fetchFavoriteTrips = (userId) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(`/api/users/${userId}/favorite-trips`);
+      console.log('response is', response);
+      dispatch(receiveFavoriteTrips(response));
+    } catch(e) {
+      console.log('error fetching favorite trips', e);
+    }
+  }
+};
+
+export const receiveFavoriteTrips = (response) => {
+  return {
+    type: 'RECEIVE_FAVORITE_TRIPS',
+    payload: {
+      response
+    }
+  };
+};
+
+export const postFavoriteTrip = (userId, trip) => {
+  console.log('userid and trip are', userId, trip)
+  return async (dispatch) => {
+    try {
+      const response = await axios.post(`/api/favorite-trips`, {
+        params: {
+          userId,
+          trip
+        }
+      });
+      console.log('POST response is', response);
+      dispatch(addTripToFavorites(trip));
+    } catch(e) {
+      console.log('error fetching favorite trips', e);
+    }
+  }
+};
+
+export const addTripToFavorites = (trip) => {
+  return {
+    type: 'ADD_FAVORITE_TRIP',
+    payload: {
+      trip
+    }
+  };
+};
+
+export const removeTripFromFavorites = (trip) => {
+  return {
+    type: 'REMOVE_FAVORITE_TRIP',
+    payload: {
+      trip
+    }
+  };
+};
+
 export const addLineToFilter = (line) => {
   return {
     type: 'ADD_LINE',

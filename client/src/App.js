@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 import FavoriteSwitch from './components/FavoriteSwitch.js';
 import LineFilter from './components/LineFilter.js';
@@ -7,7 +8,7 @@ import TripsContainer from './containers/TripsContainer';
 import MapContainer from './containers/MapContainer.js';
 import Spinner from './components/Spinner.js';
 
-import { fetchTrips } from './actions/apiActions.js';
+import { fetchTrips, fetchFavoriteTrips } from './actions/apiActions.js';
 
 import './App.css';
 
@@ -18,6 +19,7 @@ class App extends Component {
 
   componentDidMount() {
     this.props.fetchTrips({page: 1, routes: [], sort: 'origin-departure'});
+    this.props.fetchFavoriteTrips(this.props.userId);
   }
 
   render() {
@@ -52,12 +54,14 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    userId: state.api.userId,
     tripStatus: state.trips.status
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchTrips: (params) => dispatch(fetchTrips(params)) // i.e. {page: 1, route: null, sort: 'origin-departure'}
+  fetchTrips: (params) => dispatch(fetchTrips(params)), // i.e. {page: 1, route: null, sort: 'origin-departure'}
+  fetchFavoriteTrips: (userId) => dispatch(fetchFavoriteTrips(userId))
 });
 
 

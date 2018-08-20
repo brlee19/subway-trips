@@ -24,24 +24,6 @@ export const receiveArrivals = (tripId, response) => {
   };
 };
 
-export const addTripToFavorites = (trip) => {
-  return {
-    type: 'ADD_FAVORITE_TRIP',
-    payload: {
-      trip
-    }
-  };
-};
-
-export const removeTripFromFavorites = (trip) => {
-  return {
-    type: 'REMOVE_FAVORITE_TRIP',
-    payload: {
-      trip
-    }
-  };
-};
-
 export const displayFavoriteTrips = () => {
   return {
     type: 'DISPLAY_FAVORITE_TRIPS'
