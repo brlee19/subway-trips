@@ -1,5 +1,5 @@
 const { Client } = require('pg');
-const moment = require('moment');
+const { createTimestamp, formatTrips} = require('../utils/utils.js');
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL || require('../config.js').databaseUrl,
@@ -8,37 +8,7 @@ const client = new Client({
 
 client.connect();
 
-const createTimestamp = (formattedTime) => {
-  return moment(formattedTime, 'MMM DD h:mm A').toISOString();
-};
-
-const formatTrips = (tripQueryResults) => {
-  return tripQueryResults.map(trip => (
-    {
-      id: String(trip.trip_id),
-      type: 'trips',
-      links: {
-        self: trip.self_url
-      },
-      attributes: {
-        route: String(trip.route_name),
-        ['origin-departure']: trip.origin_departure,
-        destination: trip.destination,
-        ['route-image-url']: trip.route_image_url,
-      },
-      relationships: {
-        arrivals: {
-          links: {
-            self: trip.arrivals_relationships_url,
-            related: trip.arrivals_url
-          }
-        }
-      }
-    }
-  ));
-};
-
-const saveTrip = async (trip) => {
+const saveTrip = (trip) => {
   const queryStr = `
     insert into trips(trip_id, self_url, route_name, origin_departure, destination,
     route_image_url, arrivals_relationships_url, arrivals_url)
@@ -51,7 +21,7 @@ const saveTrip = async (trip) => {
     trip.attributes.destination, trip.attributes['route-image-url'], trip.relationships.arrivals.links.self,
     trip.relationships.arrivals.links.related];
 
-  return await client.query(queryStr, values);
+  return client.query(queryStr, values);
 };
 
 exports.getFavoriteTrips = async (userId) => {
@@ -79,12 +49,12 @@ exports.saveFavoriteTrip = async (userId, trip) => {
   `;
 
   await saveTrip(trip);
-  return await client.query(queryStr, [trip.id, userId]);
+  return client.query(queryStr, [trip.id, userId]);
 };
 
-exports.deleteFavoriteTrip = async (userId, tripId) => {
+exports.deleteFavoriteTrip = (userId, tripId) => {
   const queryStr = `delete from favorite_trips where user_id = ($1) and trip_id = ($2)`;
-  return await client.query(queryStr, [userId, tripId])
+  return client.query(queryStr, [userId, tripId])
 };
 
 const getFavoriteLines = async (userId) => {
@@ -129,4 +99,4 @@ exports.updateFavoriteLines = async (userId, newFavorites) => {
   return addFavoriteLines(userId, linesToAdd).concat(deleteFavoriteLines(userId, linesToDelete));
 };
 
-exports.getFavoriteLines = getFavoriteLines
+exports.getFavoriteLines = getFavoriteLines; // this one is reused by another function
