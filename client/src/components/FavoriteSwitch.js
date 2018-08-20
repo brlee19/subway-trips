@@ -12,7 +12,8 @@ const FavoriteSwitch = (props) => {
   const { displayCurrentPageTrips, displayFavoriteTrips } = props;
 
   return (
-    <FormGroup row className="filter-buttons">
+    <div>
+    <FormGroup className="filter-buttons">
       <FormControlLabel
         control={
           <Switch
@@ -23,6 +24,7 @@ const FavoriteSwitch = (props) => {
         label="Show your favorite trips"
       />
     </FormGroup>
+    </div>
   );
 }
 

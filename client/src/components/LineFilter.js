@@ -1,10 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import FavoriteSwitch from './FavoriteSwitch.js';
 import { addLineToFilter, removeLineFromFilter, addAllLinesToFilter,
           removeAllLinesFromFilter, fetchTrips, saveFavoriteLines } from '../actions/apiActions.js';
 import { lines } from '../constants.js';
 
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+
+const style = {
+  padding: '10px',
+  margin: '5px'
+};
 
 const LineFilter = (props) => {
   const nextParamsRoutes = props.api.nextParams.routes;
@@ -27,30 +34,34 @@ const LineFilter = (props) => {
     </div>
     
     <div className="line-filter-controls">
-    Your Favorite Lines
-      <Button onClick={() => fetchTrips(api.nextParams)}
-              variant="raised"
-              color="primary"
-              size="small"
-      >Search using your favorite lines</Button>
-
       <Button onClick={addAllLinesToFilter}
               variant="raised"
               color="primary"
               size="small"
-      >Select all</Button>
+              style={style}
+      >Select all lines</Button>
 
       <Button onClick={removeAllLinesFromFilter}
               variant="raised"
               color="primary"
               size="small"
-      >Reset favorites</Button>
+              style={style}
+      >Clear all lines</Button>
+
+      <Button onClick={() => fetchTrips(api.nextParams)}
+              variant="raised"
+              color="primary"
+              size="small"
+              className="filter-button"
+              style={style}
+      >Search using selected lines</Button>
 
       <Button variant="raised"
               color="primary"
               size="small"
+              style={style}
               onClick={() => saveFavoriteLines(api.userId, nextParamsRoutes)}
-      >Save your favorite lines</Button>
+      >Save selected lines as favorites</Button>
     </div>
   </div>
   )

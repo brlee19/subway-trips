@@ -76,3 +76,8 @@
   height: 32px;
   width: 32px;
 }
+
+.filter-button {
+  padding: 5px;
+  margin: 5px;
+}
