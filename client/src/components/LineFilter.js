@@ -27,11 +27,12 @@ const LineFilter = (props) => {
     </div>
     
     <div className="line-filter-controls">
+    Your Favorite Lines
       <Button onClick={() => fetchTrips(api.nextParams)}
               variant="raised"
               color="primary"
               size="small"
-      >Search using line filters</Button>
+      >Search using your favorite lines</Button>
 
       <Button onClick={addAllLinesToFilter}
               variant="raised"
@@ -43,7 +44,7 @@ const LineFilter = (props) => {
               variant="raised"
               color="primary"
               size="small"
-      >Reset filter</Button>
+      >Reset favorites</Button>
 
       <Button variant="raised"
               color="primary"

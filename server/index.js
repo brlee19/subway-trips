@@ -51,7 +51,7 @@ app.get('/api/users/:userId/favorite-lines', async (req, res) => {
   };
 });
 
-app.post('/api/favorite-lines-test', async (req, res) => {
+app.post('/api/favorite-lines', async (req, res) => {
   try {
     const { userId, lines } = req.body;
     await updateFavoriteLines(userId, lines);
