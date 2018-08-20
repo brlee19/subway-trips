@@ -31,9 +31,9 @@ exports.getFavoriteTrips = async (userId) => {
     from favorite_trips
     join users on favorite_trips.user_id = users.user_id
     join trips t on favorite_trips.trip_id = t.trip_id
-    where users.user_id = ${userId}`;
+    where users.user_id = ($1)`;
   
-  const favoriteTrips = await client.query(queryStr);
+  const favoriteTrips = await client.query(queryStr, [userId]);
   if (favoriteTrips.rows.length) return formatTrips(favoriteTrips.rows);
   else return []; 
 };

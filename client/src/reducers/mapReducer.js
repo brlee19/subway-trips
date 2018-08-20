@@ -1,11 +1,11 @@
 import { formatArrivals } from '../constants.js';
 
 const initialState = {
-  center: { // remove if unable to make map center dynamic
+  center: {
     lat: 40.7128,
     lng: -74.0060
   },
-  zoom: 11, // make dynamic if possible
+  zoom: 11,
   arrivals: {
     selectedTrip: null,
     selectedArrival: null,
