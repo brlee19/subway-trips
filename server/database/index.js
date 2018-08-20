@@ -86,3 +86,19 @@ exports.deleteFavoriteTrip = async (userId, tripId) => {
   const queryStr = `delete from favorite_trips where user_id = ($1) and trip_id = ($2)`;
   return await client.query(queryStr, [userId, tripId])
 };
+
+exports.getFavoriteLines = async (userId) => {
+  const queryStr = `
+    select l.line_name
+    from favorite_lines
+    join users on favorite_lines.user_id = users.user_id
+    join lines l on favorite_lines.line_name = l.line_name
+    where users.user_id = ($1)`;
+  
+  const favoriteLines = await client.query(queryStr, [userId]);
+  return favoriteLines.rows;
+};
+
+exports.updateFavoriteLines = async (userId) => {
+  // ideally get an array of lines to add and another one for lines to delete
+};

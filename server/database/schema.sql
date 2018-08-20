@@ -22,7 +22,7 @@ CREATE TABLE trips(
 );
 
 CREATE TABLE lines(
-  line_name varchar primary key
+  line_name VARCHAR PRIMARY KEY
 );
 
 CREATE TABLE favorite_trips(

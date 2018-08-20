@@ -12,8 +12,7 @@ const initialState = {
   },
   arrivals: [], // arrival objects
   visibility: {
-    trips: 'currentPage', // 'currentPage' or 'favorites'
-    lines: 'all' // 'all' or 'favorites' or 'filter'
+    trips: 'currentPage' // 'currentPage' or 'favorites'
   }
 };
 
@@ -78,7 +77,7 @@ const trips = (state = initialState, action) => {
       if (state.trips.favorites.map(faveTrip => faveTrip.id).includes(trip.id)) {
         return state
       };
-      
+
       return {
         ...state,
         trips: {
