@@ -16,31 +16,11 @@ app.get('/api/users/:userId/favorite-trips', async (req, res) => {
   };
 });
 
-app.get('/api/favorite-trips-test', async (req, res) => {
-  // const { trip, userId } = req.body;
-  const testTrip = {
-    id: '1098',
-    type: 'trips',
-    links: {
-      self: 'https://nooklyn-interview.herokuapp.com/trips/1098'
-    },
-    attributes: {
-      route: 'D',
-      'origin-departure': 'Feb 08 12:04 AM',
-      destination: 'Bedford Park Blvd',
-      'route-image-url': 'https://nooklyn-interview.herokuapp.com/subway/D.png'
-    },
-    relationships: {
-      arrivals: {
-        links: {
-          self: 'https://nooklyn-interview.herokuapp.com/trips/1098/relationships/arrivals',
-          related: 'https://nooklyn-interview.herokuapp.com/trips/1098/arrivals'
-        }
-      }
-    }
-  };
+app.post('/api/favorite-trips', async (req, res) => {
+  const { trip, userId } = req.body;
   try {
-    res.send(await saveFavoriteTrip('1', testTrip));
+    await saveFavoriteTrip(userId, trip);
+    res.send('Favorite trip succesfully saved!')
   } catch(e) {
     res.status(500).send('Unable to save favorite trips!');
   };
