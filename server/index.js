@@ -3,14 +3,14 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 8080;
-const { getFavoriteTrips, saveFavoriteTrip } = require('./database/index.js');
+const { getFavoriteTrips, saveFavoriteTrip, deleteFavoriteTrip } = require('./database/index.js');
 
 app.use(express.static(__dirname + '/../client/build'));
 app.use(bodyParser.json())
 
 app.get('/api/users/:userId/favorite-trips', async (req, res) => {
-  const { userId } = req.params;
   try {
+    const { userId } = req.params;
     res.send(await getFavoriteTrips(userId));
   } catch(e) {
     res.status(500).send('Unable to get favorite trips!');
@@ -18,21 +18,25 @@ app.get('/api/users/:userId/favorite-trips', async (req, res) => {
 });
 
 app.post('/api/favorite-trips', async (req, res) => {
-  const { trip, userId } = req.body.params;
   try {
+    const { userId, trip } = req.body;
     await saveFavoriteTrip(userId, trip);
-    res.send('Favorite trip succesfully saved!') // only send if actually successful
+    res.send('Favorite trip successfully saved!');
   } catch(e) {
     res.status(500).send('Unable to save favorite trip!');
   };
 });
 
-app.delete('/api/users/:userId/trips/:tripId', async (req, res) => {
-  const { userId, tripId } = req.params;
+app.delete('/api/favorite-trips', async (req, res) => {
   try {
-    res.send(await getFavoriteTrips(userId));
+    const { userId, tripId } = req.body;
+    console.log('userId and tripId are', userId, tripId)
+    const result = await deleteFavoriteTrip(userId, tripId);
+    console.log(result);
+    res.send('Favorite trip successfully deleted!');
   } catch(e) {
-    res.status(500).send('Unable to get favorite trips!')
+    console.log('error deleting fave trip', e);
+    res.status(500).send('Unable to delete favorite trip!')
   };
 });
 

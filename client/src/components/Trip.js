@@ -37,7 +37,7 @@ const Trip = (props) => {
         <div className="favorite-buttons">
           <Button
               onClick={() => {
-                props.toggleTripFromFavorites(userId, trip)}
+                props.toggleTripFromFavorites(isFavorite.trip, userId, trip)}
               }
               variant="raised"
               color="primary"

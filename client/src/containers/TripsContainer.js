@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 
 import Trip from '../components/Trip.js';
 import NavButtons from '../components/NavButtons.js';
-import { fetchTrips, postFavoriteTrip, removeTripFromFavorites} from '../actions/apiActions.js';
+import { fetchTrips, postFavoriteTrip, deleteFavoriteTrip, removeTripFromFavorites} from '../actions/apiActions.js';
 import { selectTrip, addLineToFavorites, removeLineFromFavorites } from '../actions/tripsActions.js';
 
 class TripsContainer extends Component {
   render() {
     const { trips, visibility, api, fetchPage, selectTrip,
-            postFavoriteTrip } = this.props;
+            toggleTripFromFavorites} = this.props;
     const visibleTrips = applyVisibilityFilter(trips, visibility);
     return (
     <div>
@@ -22,7 +22,7 @@ class TripsContainer extends Component {
             isFavorite={{
               trip: trips.favorites.map(faveTrip => faveTrip.id).includes(trip.id)
             }}
-            toggleTripFromFavorites={postFavoriteTrip}
+            toggleTripFromFavorites={toggleTripFromFavorites}
       />
     ))}
     </div>
@@ -56,12 +56,10 @@ const mapDispatchToProps = (dispatch) => ({
     if (currentSelectedId !== trip.id) dispatch(selectTrip(trip));
   },
   postFavoriteTrip: (userId, trip) => dispatch(postFavoriteTrip(userId, trip)),
-  // toggleTripFromFavorites: (isFavorite, trip) => {
-  //   isFavorite ? dispatch(removeTripFromFavorites(trip)) : dispatch(postFavoriteTrip(userId, trip))
-  // },
-  toggleLineFromFavorites: (isFavorite, line) => {
-    isFavorite ? dispatch(removeLineFromFavorites(line)) : dispatch(addLineToFavorites(line))
-  }
+  deleteFavoriteTrip: (userId, trip) => dispatch(deleteFavoriteTrip(userId, trip)),
+  toggleTripFromFavorites: (isFavorite, userId, trip) => {
+    isFavorite ? dispatch(deleteFavoriteTrip(userId, trip)) : dispatch(postFavoriteTrip(userId, trip))
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TripsContainer);

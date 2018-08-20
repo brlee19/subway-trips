@@ -75,6 +75,10 @@ const trips = (state = initialState, action) => {
 
     case 'ADD_FAVORITE_TRIP': {
       const { trip } = action.payload;
+      if (state.trips.favorites.map(faveTrip => faveTrip.id).includes(trip.id)) {
+        return state
+      };
+      
       return {
         ...state,
         trips: {

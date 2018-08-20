@@ -76,3 +76,8 @@ exports.saveFavoriteTrip = async (userId, trip) => {
   await saveTrip(trip);
   return await client.query(queryStr, [trip.id, userId]);
 };
+
+exports.deleteFavoriteTrip = async (userId, tripId) => {
+  const queryStr = `delete from favorite_trips where user_id = ($1) and trip_id = ($2)`;
+  return await client.query(queryStr, [userId, tripId])
+};

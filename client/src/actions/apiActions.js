@@ -59,21 +59,38 @@ export const receiveFavoriteTrips = (response) => {
 };
 
 export const postFavoriteTrip = (userId, trip) => {
-  console.log('userid and trip are', userId, trip)
   return async (dispatch) => {
     try {
       const response = await axios.post(`/api/favorite-trips`, {
-        params: {
           userId,
           trip
         }
-      });
-      console.log('POST response is', response);
-      dispatch(addTripToFavorites(trip));
+      );
+      if (response.data === 'Favorite trip successfully saved!') {
+        dispatch(addTripToFavorites(trip));
+      }
     } catch(e) {
-      console.log('error fetching favorite trips', e);
+      console.log('error posting favorite trip', e);
     }
-  }
+  };
+};
+
+export const deleteFavoriteTrip = (userId, trip) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.delete(`/api/favorite-trips`, {data: {
+          userId,
+          tripId: trip.id
+        }
+      });
+      console.log('response from server after deleting is', response.data)
+      if (response.data === 'Favorite trip successfully deleted!') {
+        dispatch(removeTripFromFavorites(trip));
+      }
+    } catch(e) {
+      console.log('error deleting favorite trip', e);
+    }
+  };
 };
 
 export const addTripToFavorites = (trip) => {
