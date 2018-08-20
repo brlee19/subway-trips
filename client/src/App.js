@@ -11,7 +11,7 @@ import { fetchTrips, fetchFavoriteTrips, fetchFavoriteLines } from './actions/ap
 
 import './App.css';
 
-class App extends Component {
+export class App extends Component {
   componentDidMount() {
     this.props.fetchTrips({page: 1, routes: [], sort: 'origin-departure'});
     this.props.fetchFavoriteTrips(this.props.userId);
@@ -59,6 +59,5 @@ const mapDispatchToProps = (dispatch) => ({
   fetchFavoriteTrips: (userId) => dispatch(fetchFavoriteTrips(userId)),
   fetchFavoriteLines: (userId) => dispatch(fetchFavoriteLines(userId))
 });
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

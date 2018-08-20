@@ -18,7 +18,7 @@ class MapContainer extends Component {
         <GoogleMapReact
           bootstrapURLKeys={{ key: googleAPIKey }}
           center={googleMap.center}
-          defaultZoom={googleMap.zoom}
+          zoom={googleMap.zoom}
           onChange={({center, zoom}) => updateMap(center, zoom)}
         >
         {arrivals.map(arrival => (
