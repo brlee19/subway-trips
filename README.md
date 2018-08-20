@@ -3,7 +3,7 @@ Run `npm install` and `npm start` from both of the `client` and `server` folders
 Alternatively, you can run `npm run preinstall` and `npm run dev` from the top level folder.
 
 ## Deployed version
-Available at (https://subway-trips.herokuapp.com/)
+Available at https://subway-trips.herokuapp.com/
 
 ## Key technologies used
 React, Redux, Node, Express, Postgres, Heroku
