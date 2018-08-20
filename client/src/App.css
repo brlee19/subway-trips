@@ -63,6 +63,16 @@
 
 .trips-container {
   width: 40%;
+  display: inline-block;
+  max-height: 1200px;
+  overflow-y: scroll;
+}
+
+.map-container {
+  width: 40%;
+  display: inline-block;
+  vertical-align: top;
+  max-height: 1200px;
 }
 
 .line-filter {

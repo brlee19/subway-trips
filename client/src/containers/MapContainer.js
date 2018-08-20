@@ -13,7 +13,7 @@ class MapContainer extends Component {
     const { arrivals, googleMap, updateMap } = this.props;
 
     return (
-      <div style={{ height: '100vh', width: '100%' }}>
+      <div style={{ height: '1100px', width: '100%' }}>
         <ArrivalInfo arrival={ googleMap.arrivals.selectedArrival }/>
         <GoogleMapReact
           bootstrapURLKeys={{ key: googleAPIKey }}

@@ -4,15 +4,5 @@ body {
   font-family: sans-serif;
 }
 
-.trips-container {
-  width: 40%;
-  display: inline-block;
-  max-height: 2000px;
-  overflow-y: scroll;
-}
 
-.map-container {
-  width: 40%;
-  display: inline-block;
-  vertical-align: top;
-}
+
