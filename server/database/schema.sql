@@ -11,13 +11,14 @@ CREATE TABLE users(
 
 CREATE TABLE trips(
   -- various fields necessary to create the trip object 
-  trip_id INT NOT NULL PRIMARY KEY,
-  link_self VARCHAR(100),
-  route_id VARCHAR(5),
-  origin_departure VARCHAR(100),
-  route_image_url VARCHAR(100),
-  arrivals_relationships_url VARCHAR(100),
-  arrivals_urls VARCHAR(100)
+  trip_id serial PRIMARY KEY,
+  self_url VARCHAR,
+  route_name VARCHAR,
+  origin_departure VARCHAR,
+  destination VARCHAR,
+  route_image_url VARCHAR,
+  arrivals_relationships_url VARCHAR,
+  arrivals_url VARCHAR
 );
 
 CREATE TABLE lines(
@@ -26,8 +27,9 @@ CREATE TABLE lines(
 
 CREATE TABLE favorite_trips(
   -- users to trips (many to many)
-  trip_id serial NOT NULL PRIMARY KEY,
-  user_id INT
+  trip_id serial references trips(trip_id),
+  user_id serial references users(user_id),
+  unique (user_id, trip_id)
 );
 
 CREATE TABLE favorite_lines(
