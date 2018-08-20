@@ -129,6 +129,23 @@ export const receiveFavoriteLines = (response) => {
   };
 };
 
+export const saveFavoriteLines = (userId, lines) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.post(`/api/favorite-trips`, { userId, lines });
+      // user only needs to know if app was unable to save favorite lines
+      // if the save was successful, nothing in the app state changes
+      if (response.data !== 'Favorite lines successfully saved!') { 
+        alert('Unable to save your favorite lines, please try again later');
+      }
+    } catch(e) {
+      console.log('error fetching favorite lines', e);
+      alert('Unable to save your favorite lines, please try again later');
+    }
+  }
+};
+
+
 export const addLineToFilter = (line) => {
   return {
     type: 'ADD_LINE',

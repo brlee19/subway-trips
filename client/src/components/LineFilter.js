@@ -1,13 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addLineToFilter, removeLineFromFilter, addAllLinesToFilter, removeAllLinesFromFilter, fetchTrips } from '../actions/apiActions.js';
+import { addLineToFilter, removeLineFromFilter, addAllLinesToFilter,
+          removeAllLinesFromFilter, fetchTrips, saveFavoriteLines } from '../actions/apiActions.js';
 import { lines } from '../constants.js';
 
 import Button from '@material-ui/core/Button';
 
 const LineFilter = (props) => {
   const nextParamsRoutes = props.api.nextParams.routes;
-  const { api, addLineToFilter, removeLineFromFilter, addAllLinesToFilter, removeAllLinesFromFilter, fetchTrips } = props;
+  const { api, addLineToFilter, removeLineFromFilter, addAllLinesToFilter,
+          removeAllLinesFromFilter, fetchTrips, saveFavoriteLines } = props;
   return (
   <div>
     <div className="line-filter">
@@ -46,6 +48,7 @@ const LineFilter = (props) => {
       <Button variant="raised"
               color="primary"
               size="small"
+              onClick={() => saveFavoriteLines(api.userId, nextParamsRoutes)}
       >Save your favorite lines</Button>
     </div>
   </div>
@@ -63,7 +66,8 @@ const mapDispatchToProps = (dispatch) => ({
   removeLineFromFilter: (line) => dispatch(removeLineFromFilter(line)),
   addAllLinesToFilter: () => dispatch(addAllLinesToFilter()),
   removeAllLinesFromFilter: () => dispatch(removeAllLinesFromFilter()),
-  fetchTrips: (params) => dispatch(fetchTrips(params))
+  fetchTrips: (params) => dispatch(fetchTrips(params)),
+  saveFavoriteLines: (userId, lines) => dispatch(saveFavoriteLines(userId, lines))
 });
 
 
