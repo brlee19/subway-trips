@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 
 import Trip from '../components/Trip.js';
 import NavButtons from '../components/NavButtons.js';
-import { fetchTrips, postFavoriteTrip, deleteFavoriteTrip, removeTripFromFavorites} from '../actions/apiActions.js';
-import { selectTrip, addLineToFavorites, removeLineFromFavorites } from '../actions/tripsActions.js';
+import { fetchTrips, postFavoriteTrip, deleteFavoriteTrip } from '../actions/apiActions.js';
+import { selectTrip } from '../actions/tripsActions.js';
 
 class TripsContainer extends Component {
   render() {
@@ -55,8 +55,6 @@ const mapDispatchToProps = (dispatch) => ({
   selectTrip: (currentSelectedId, trip) => {
     if (currentSelectedId !== trip.id) dispatch(selectTrip(trip));
   },
-  postFavoriteTrip: (userId, trip) => dispatch(postFavoriteTrip(userId, trip)),
-  deleteFavoriteTrip: (userId, trip) => dispatch(deleteFavoriteTrip(userId, trip)),
   toggleTripFromFavorites: (isFavorite, userId, trip) => {
     isFavorite ? dispatch(deleteFavoriteTrip(userId, trip)) : dispatch(postFavoriteTrip(userId, trip))
   },

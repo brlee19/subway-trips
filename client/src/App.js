@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 
 import FavoriteSwitch from './components/FavoriteSwitch.js';
 import LineFilter from './components/LineFilter.js';
@@ -13,10 +12,6 @@ import { fetchTrips, fetchFavoriteTrips } from './actions/apiActions.js';
 import './App.css';
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   componentDidMount() {
     this.props.fetchTrips({page: 1, routes: [], sort: 'origin-departure'});
     this.props.fetchFavoriteTrips(this.props.userId);

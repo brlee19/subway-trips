@@ -41,7 +41,6 @@ export const fetchFavoriteTrips = (userId) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(`/api/users/${userId}/favorite-trips`);
-      console.log('response is', response);
       dispatch(receiveFavoriteTrips(response));
     } catch(e) {
       console.log('error fetching favorite trips', e);

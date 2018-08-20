@@ -11,7 +11,6 @@ const googleAPIKey = process.env.GOOGLE_API_KEY || require('../config.js').googl
 class MapContainer extends Component {
   render() {
     const { arrivals, googleMap, updateMap } = this.props;
-    console.log('map has re-rendered')
 
     return (
       <div style={{ height: '100vh', width: '100%' }}>
