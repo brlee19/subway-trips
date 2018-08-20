@@ -36,7 +36,6 @@ class App extends Component {
   
         <div className="trips-container">
           {this.props.tripStatus.isLoading ? <Spinner /> : <TripsContainer />}
-          
         </div>
         
         <div className="map-container">

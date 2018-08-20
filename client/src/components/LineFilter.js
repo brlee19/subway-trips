@@ -1,12 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import FavoriteSwitch from './FavoriteSwitch.js';
 import { addLineToFilter, removeLineFromFilter, addAllLinesToFilter,
           removeAllLinesFromFilter, fetchTrips, saveFavoriteLines } from '../actions/apiActions.js';
 import { lines } from '../constants.js';
 
 import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 
 const style = {
   padding: '10px',
