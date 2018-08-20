@@ -12,20 +12,6 @@ const createTimestamp = (formattedTime) => {
   return moment(formattedTime, 'MMM DD h:mm A').toISOString();
 };
 
-exports.getFavoriteTrips = async (userId) => {
-  const queryStr = `
-    select t.trip_id, t.self_url, t.route_name, t.origin_departure, t.destination,
-    t.route_image_url, t.arrivals_relationships_url, t.arrivals_url
-    from favorite_trips
-    join users on favorite_trips.user_id = users.user_id
-    join trips t on favorite_trips.trip_id = t.trip_id
-    where users.user_id = ${userId}`;
-  
-  const favoriteTrips = await client.query(queryStr);
-  if (favoriteTrips.rows.length) return formatTrips(favoriteTrips.rows);
-  else return []; 
-};
-
 const formatTrips = (tripQueryResults) => {
   return tripQueryResults.map(trip => (
     {
@@ -68,6 +54,20 @@ const saveTrip = async (trip) => {
   return await client.query(queryStr, values);
 };
 
+exports.getFavoriteTrips = async (userId) => {
+  const queryStr = `
+    select t.trip_id, t.self_url, t.route_name, t.origin_departure, t.destination,
+    t.route_image_url, t.arrivals_relationships_url, t.arrivals_url
+    from favorite_trips
+    join users on favorite_trips.user_id = users.user_id
+    join trips t on favorite_trips.trip_id = t.trip_id
+    where users.user_id = ${userId}`;
+  
+  const favoriteTrips = await client.query(queryStr);
+  if (favoriteTrips.rows.length) return formatTrips(favoriteTrips.rows);
+  else return []; 
+};
+
 exports.saveFavoriteTrip = async (userId, trip) => {
   const queryStr = `
     insert into favorite_trips(trip_id, user_id)
@@ -87,7 +87,7 @@ exports.deleteFavoriteTrip = async (userId, tripId) => {
   return await client.query(queryStr, [userId, tripId])
 };
 
-exports.getFavoriteLines = async (userId) => {
+const getFavoriteLines = async (userId) => {
   const queryStr = `
     select l.line_name
     from favorite_lines
@@ -99,6 +99,34 @@ exports.getFavoriteLines = async (userId) => {
   return favoriteLines.rows;
 };
 
-exports.updateFavoriteLines = async (userId) => {
-  // ideally get an array of lines to add and another one for lines to delete
+const addFavoriteLine = async (userId, line) => {
+  const queryStr = `
+    insert into favorite_lines(user_id, line_name)
+    values ($1, $2)
+  `;
+  return client.query(queryStr, [userId, line])
 };
+
+const addFavoriteLines = (userId, lines) => {
+  return lines.map(line => addFavoriteLine(userId, line));
+};
+
+const deleteFavoriteLine = (userId, line) => {
+  const queryStr = `delete from favorite_lines where user_id = ($1) and line_name = ($2)`;
+  return client.query(queryStr, [userId, line]);
+};
+
+const deleteFavoriteLines = (userId, lines) => {
+  return lines.map(line => deleteFavoriteLine(userId, line));
+};
+
+exports.updateFavoriteLines = async (userId, newFavorites) => {
+  const oldFavoritesRows = await getFavoriteLines(userId);
+  const oldFavorites = oldFavoritesRows.map(lineRow => lineRow.line_name)
+  const linesToDelete = oldFavorites.filter(oldFave => !newFavorites.includes(oldFave));
+  const linesToAdd = newFavorites.filter(newFave => !oldFavorites.includes(newFave));
+
+  return addFavoriteLines(userId, linesToAdd).concat(deleteFavoriteLines(userId, linesToDelete));
+};
+
+exports.getFavoriteLines = getFavoriteLines

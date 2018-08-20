@@ -132,7 +132,7 @@ export const receiveFavoriteLines = (response) => {
 export const saveFavoriteLines = (userId, lines) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post(`/api/favorite-trips`, { userId, lines });
+      const response = await axios.post(`/api/favorite-lines`, { userId, lines });
       // user only needs to know if app was unable to save favorite lines
       // if the save was successful, nothing in the app state changes
       if (response.data !== 'Favorite lines successfully saved!') { 
