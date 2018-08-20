@@ -109,6 +109,26 @@ export const removeTripFromFavorites = (trip) => {
   };
 };
 
+export const fetchFavoriteLines = (userId) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(`/api/users/${userId}/favorite-lines`);
+      dispatch(receiveFavoriteLines(response));
+    } catch(e) {
+      console.log('error fetching favorite lines', e);
+    }
+  }
+};
+
+export const receiveFavoriteLines = (response) => {
+  return {
+    type: 'RECEIVE_FAVORITE_LINES',
+    payload: {
+      response
+    }
+  };
+};
+
 export const addLineToFilter = (line) => {
   return {
     type: 'ADD_LINE',

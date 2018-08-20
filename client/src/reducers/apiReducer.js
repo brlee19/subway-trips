@@ -39,6 +39,18 @@ const api = (state = initialState, action) => {
       };
     }
 
+    case 'RECEIVE_FAVORITE_LINES': {
+      const lines = action.payload.response.data.map(dataRow => dataRow.line_name);
+  
+      return {
+        ...state,
+        nextParams: {
+          ...state.nextParams,
+          routes: [...lines]
+        }
+      };
+    }
+
     case 'ADD_LINE': {
       const { line } = action.payload;
   
