@@ -1,3 +1,7 @@
+## FYI
+
+This was a take-home project which consumed an API the company set up with NYC subway trip information. The company seems to have taken down their API, which is why it now has an infinite spinner instead of loading any subway trips.
+
 ## Running in dev mode
 Run `npm install` and `npm start` from both of the `client` and `server` folders.
 Alternatively, you can run `npm run preinstall` and `npm run dev` from the top level folder.
